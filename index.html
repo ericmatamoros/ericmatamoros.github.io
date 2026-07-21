@@ -53,6 +53,7 @@
 
     /* ---------- backdrop: starfield + scanlines + vignette ---------- */
     #stars { position: fixed; inset: 0; z-index: -3; }
+    #battle { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
     .scanlines {
       position: fixed; inset: 0; z-index: 50; pointer-events: none;
       background: repeating-linear-gradient(to bottom, rgba(255,255,255,.028) 0 1px, transparent 1px 3px);
@@ -197,6 +198,11 @@
     @media (max-width: 700px) { .player-card .pc-stats { margin-left: 0; } }
 
     .map { position: relative; padding-left: 34px; }
+    .map-arc {
+      font-family: var(--px); font-size: 11px; color: var(--cyan);
+      letter-spacing: 2px; margin-bottom: 26px;
+      text-shadow: 0 0 10px rgba(34,211,238,.5);
+    }
     .map::before {
       content: ""; position: absolute; left: 12px; top: 8px; bottom: 8px; width: 4px;
       background: repeating-linear-gradient(to bottom, var(--line) 0 10px, transparent 10px 18px);
@@ -282,6 +288,12 @@
     .quest-sub { color: var(--ink-mute); font-size: 14px; margin-bottom: 24px; max-width: 720px; }
     .quests { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
     .quest { padding: 20px; display: flex; flex-direction: column; transition: transform .2s ease, box-shadow .2s ease; }
+    .quest .qimg {
+      width: calc(100% + 40px); margin: -20px -20px 16px; height: 150px;
+      object-fit: cover; object-position: top; display: block;
+      border-bottom: 1px solid var(--line);
+      filter: saturate(1.05);
+    }
     .quest:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px rgba(34,211,238,.25), 0 18px 44px rgba(0,0,0,.55); }
     .quest .qt { font-family: var(--px); font-size: 11px; line-height: 1.8; color: var(--cyan); margin-bottom: 10px; }
     .quest .qd { color: var(--ink-dim); font-size: 14px; flex: 1; margin-bottom: 12px; }
@@ -354,6 +366,7 @@
 </head>
 <body>
   <canvas id="stars" aria-hidden="true"></canvas>
+  <canvas id="battle" aria-hidden="true"></canvas>
   <div class="scanlines" aria-hidden="true"></div>
   <div class="vignette" aria-hidden="true"></div>
 
@@ -412,33 +425,53 @@
     </div>
 
     <div class="map">
+      <p class="map-arc reveal">▸ ARC I · EDUCATION</p>
+
       <article class="lvl panel done reveal">
         <span class="node" aria-hidden="true"></span>
         <p class="lvl-tag">LEVEL 1 · TUTORIAL ZONE · CLEARED</p>
-        <h3>BSc BIOCHEMISTRY</h3>
-        <p>Universitat de Barcelona, 2017–2021. Learned the original source code: proteins, pathways and lab data. Final thesis (9.2/10) built a tool to estimate RNA tertiary structure — the moment code took over the run.</p>
+        <h3>BSc BIOCHEMISTRY · UNIVERSITAT DE BARCELONA</h3>
+        <p>Sep 2017 – Jun 2021 · grade 8.3/10. Learned the original source code: proteins, pathways and lab data. Final thesis (9.2/10) built a tool to estimate RNA tertiary structure — the moment code took over the run.</p>
         <div class="loot"><span class="chip">Scientific method</span><span class="chip">First code</span><span class="chip">Data literacy</span></div>
       </article>
 
       <article class="lvl panel done reveal">
         <span class="node" aria-hidden="true"></span>
         <p class="lvl-tag">LEVEL 2 · RESEARCH CAVES · CLEARED</p>
-        <h3>COMPUTATIONAL BIOLOGIST @ IRB BARCELONA</h3>
-        <p>2019–2021: estimated RNA tertiary structure with Monte Carlo simulations, an ML-learned force field and Bayesian-scored pseudo-torsional angles. Levelled up with an MSc in Bioinformatics &amp; Biostatistics (thesis 9.3/10: EpiFRIenDs malaria-hotspot detection) and a postgraduate in AI &amp; Deep Learning at UPC. Contributed to the veriNA3d and REpiFRIenDs open-source packages.</p>
+        <h3>MSc BIOINFORMATICS &amp; BIOSTATISTICS · UOC</h3>
+        <p>Sep 2021 – Sep 2023 · grade 8.5/10. Statistics and machine learning on biological data. Final thesis (9.3/10): enhancement of EpiFRIenDs, an algorithm for hotspot detection of epidemiological disease, with special focus on malaria.</p>
+        <div class="loot"><span class="chip">R</span><span class="chip">Statistics</span><span class="chip">Machine learning</span></div>
+      </article>
+
+      <article class="lvl panel done reveal">
+        <span class="node" aria-hidden="true"></span>
+        <p class="lvl-tag">LEVEL 3 · DEEP LEARNING DOJO · CLEARED</p>
+        <h3>POSTGRADUATE IN AI · UPC SCHOOL</h3>
+        <p>Sep 2024 – Mar 2025 · grade 9/10. Postgraduate Course in Artificial Intelligence with Deep Learning by UPC. Final project: a multiple-instance-learning pipeline for whole-slide medical images.</p>
+        <div class="loot"><span class="chip">Deep Learning</span><span class="chip">Computer vision</span><span class="chip">Neural nets</span></div>
+      </article>
+
+      <p class="map-arc reveal" style="margin-top:44px">▸ ARC II · WORK EXPERIENCE · +6 YEARS</p>
+
+      <article class="lvl panel done reveal">
+        <span class="node" aria-hidden="true"></span>
+        <p class="lvl-tag">LEVEL 4 · RESEARCH GUILD · CLEARED</p>
+        <h3><span class="lvl-logo"><img src="./assets/irb-logo.svg" alt="IRB Barcelona logo" /></span>COMPUTATIONAL BIOLOGIST @ IRB BARCELONA</h3>
+        <p>Sep 2019 – Jun 2021: estimated RNA tertiary structure with Monte Carlo simulations, an ML-learned force field and Bayesian-scored pseudo-torsional angles. Contributed to the veriNA3d and REpiFRIenDs open-source packages.</p>
         <div class="loot"><span class="chip">R</span><span class="chip">Python</span><span class="chip">Monte Carlo</span><span class="chip">Open source</span></div>
       </article>
 
       <article class="lvl panel done reveal">
         <span class="node" aria-hidden="true"></span>
-        <p class="lvl-tag">LEVEL 3 · CORPORATE FORTRESS · CLEARED</p>
-        <h3><span class="lvl-logo"><img src="./assets/novartis-logo.svg" alt="Novartis logo" /></span>DATA SCIENTIST @ NOVARTIS</h3>
+        <p class="lvl-tag">LEVEL 5 · CORPORATE FORTRESS · CLEARED</p>
+        <h3><span class="lvl-logo"><img src="./assets/novartis-logo.svg" alt="Novartis logo" /></span>SENIOR DATA SCIENTIST @ NOVARTIS</h3>
         <p>Five-year campaign (2020–2025), levelling from Trainee to Senior. Built and fully industrialized the Sales Forecasting engine covering 3,000+ country-drug products, modelled product lifecycle-transition impact, ran stakeholder workshops across three continents and served as Technical Lead of the Novartis Datathon 2022 (50+ international teams). Final quest in Basel: LLM architectures for in-silico gene-expression perturbation in the Immunology group.</p>
         <div class="loot"><span class="chip">Forecasting</span><span class="chip">LLMs</span><span class="chip">MLOps</span><span class="chip">AWS</span><span class="chip">Leadership</span></div>
       </article>
 
       <article class="lvl panel boss reveal">
         <span class="node" aria-hidden="true"></span>
-        <p class="lvl-tag">LEVEL 4 · BOSS LEVEL · IN PROGRESS</p>
+        <p class="lvl-tag">LEVEL 6 · BOSS LEVEL · IN PROGRESS</p>
         <h3><span class="lvl-logo"><img src="./assets/hp-logo.svg" alt="HP logo" /></span>TECHNICAL LEAD AI @ HP <span class="you-are-here">YOU ARE HERE</span></h3>
         <p>Joined in January 2025 as Senior AI Engineer on the core of HP Nio. Since April 2026: Technical Lead AI, leading a team of six AI engineers expanding Nio's capabilities into new domains and business units — Large Format, 3D and Sales. Scroll down to meet the boss.</p>
         <div class="loot"><span class="chip">GenAI</span><span class="chip">LLM systems</span><span class="chip">Team of 6</span><span class="chip">AI-first product</span></div>
@@ -527,18 +560,18 @@
   <section id="activity">
     <p class="sec-tag reveal">SAVE FILE</p>
     <h2 class="sec-title reveal">ACTIVITY LOG</h2>
-    <p class="sec-sub reveal">Straight from the GitHub save file. The 25 public repos are just the demo — the real campaign runs across <b style="color:var(--ink)">95 private builds</b> plus HP's own forge.</p>
+    <p class="sec-sub reveal">Straight from the GitHub save file — vault opened. Public and private repos combined: <b style="color:var(--ink)">825 commits across 131 active days</b> in the last year, plus whatever happens in HP's own forge.</p>
 
     <div class="stat-tiles reveal" id="stat-tiles"></div>
 
     <div class="heat-wrap panel reveal">
-      <p class="heat-title">PUBLIC CONTRIBUTIONS · LAST 12 MONTHS</p>
+      <p class="heat-title">CONTRIBUTIONS · LAST 12 MONTHS · PUBLIC + PRIVATE</p>
       <div id="heatmap" role="img" aria-label="GitHub contribution heatmap for the last year"></div>
       <div class="heat-legend">
         <span>Less</span>
         <i style="background:#10182b"></i><i style="background:#0e4429"></i><i style="background:#006d32"></i><i style="background:#26a641"></i><i style="background:#39d353"></i>
         <span>More</span>
-        <span style="margin-left:auto">🔒 most quests are completed in private repos — this map only shows surface activity</span>
+        <span style="margin-left:auto">🔓 vault opened — commits from all 95 private builds included</span>
       </div>
     </div>
     <div id="heat-tip"></div>
@@ -563,7 +596,7 @@
 
   <footer>
     <p>© <span id="year"></span> ERIC MATAMOROS · <b>ericmatamoros.github.io</b></p>
-    <p style="margin-top:8px">This site practices what it preaches: designed by me, vibecoded with AI. Try the Konami code. 🕹️</p>
+    <p style="margin-top:8px">This site practices what it preaches: designed by me, vibecoded with AI. Try the Konami code — and if a fighter flies past, click it. 🕹️</p>
   </footer>
 
   <div id="toasts" aria-live="polite"></div>
@@ -573,8 +606,8 @@
       stats: { repos: 120, commits: 882, apps: 38, years: 7 },
       calendar: {
         start: "2025-07-20",
-        total: 60,
-        counts: "0000000000000000000000000003303000092200000001000000000000000000000000000000000000000000000000000000010500020400200000000000000000000000000000000000000000000012000000000000010000000000000000000000000000000000000000000000000000100000000000000000000000000000001000000000000001000000000000001100000100020000000010000000000000010000000000000000000000024003000000000000000"
+        total: 825,
+        counts: "0000000000000000000000000003303000001000000072080303000010000000000009600000390001014000000000000020000500020400200000991350909744823037072719920000772942339220000300002253109921000920000090000009120201282220100000000000003000000000400000002943427500069999999999922000000021000199410000000000000000010000000542200601200000000000000000003001000000014013010000490003914"
       },
       skills: [
         { nm: "GENAI & LLM SYSTEMS", lv: 9, sub: "RAG, agents, eval — shipped in HP Nio", w: "92%" },
@@ -618,7 +651,7 @@
           desc: "R package for nucleic-acid structural analysis built at IRB Barcelona. Contributed faster data processing and dihedral-angle calculus.",
           tech: ["R", "Bioinformatics"],
           meta: "open science · IRB Barcelona",
-          url: "http://mmb.irbbarcelona.org/gitlab/dgallego/veriNA3d"
+          url: "https://github.com/Digp/veriNA3d-dev"
         },
         {
           title: "REPIFRIENDS · CONTRIBUTOR",
@@ -631,6 +664,7 @@
       vibecoded: [
         {
           title: "JIRASAN UNIVERSE",
+          img: "./assets/projects/jirasan.jpg",
           desc: "A comprehensive set of games, socials and quests for the Jirasan NFT ecosystem — one universe of characters, stories and community. Your identity in a new world.",
           tech: ["TypeScript", "Web3", "Games"],
           meta: "15+ repos · jirasan.io",
@@ -638,6 +672,7 @@
         },
         {
           title: "REDACTED CINEFI",
+          img: "./assets/projects/cinefi.jpg",
           desc: "Financial dashboard for Web3-funded films with guaranteed ROI — digital passes, portfolio value and returns of tokenized film investments in one place.",
           tech: ["TypeScript", "Next.js", "Web3"],
           meta: "203 commits · 🔒 private repo · app live",
@@ -645,6 +680,7 @@
         },
         {
           title: "FOMO CUP",
+          img: "./assets/projects/fomocup.jpg",
           desc: "World Cup prediction game for the Jirasan ecosystem: match board, live odds and bet slips — support your nation with Jiras in jerseys.",
           tech: ["TypeScript", "Games"],
           meta: "🔒 private repo · app live",
@@ -652,6 +688,7 @@
         },
         {
           title: "TOMOGOCHI",
+          img: "./assets/projects/tomogochi.jpg",
           desc: "A new battle, amazing creatures: capture at the gate, trade on the market, fill your Togedex and fight your way up with $TOMO on the line.",
           tech: ["TypeScript", "Games", "Web3"],
           meta: "app live",
@@ -659,6 +696,7 @@
         },
         {
           title: "WORTHIT",
+          img: "./assets/projects/worthit.jpg",
           desc: "A fair shot at attention: paid DMs, booths and crews running on Solana escrow. Money moves when the work happens — if it doesn't, automatic refund.",
           tech: ["Svelte", "Solana"],
           meta: "5 iterations · app live",
@@ -673,6 +711,7 @@
         },
         {
           title: "NFT HOLDER ATLAS",
+          img: "./assets/projects/atlas.jpg",
           desc: "Global atlas for NFT communities: holder pins, events and businesses across collections — Apes, Punks, Penguins and more — all on one map.",
           tech: ["TypeScript", "Maps"],
           meta: "26 commits · app live",
@@ -680,6 +719,7 @@
         },
         {
           title: "HUMANOID",
+          img: "./assets/projects/humanoid.jpg",
           desc: "Agentic identity drop: 3,333 humanoids with agentic traits, building a world where surrender is quiet and automation has a face.",
           tech: ["CSS", "HTML", "Web3"],
           meta: "public · whitelist open",
@@ -779,6 +819,7 @@
     /* ---------- render quests ---------- */
     const questCard = q => `
       <article class="quest panel reveal">
+        ${q.img ? `<img class="qimg" src="${q.img}" alt="${q.title} screenshot" loading="lazy" />` : ""}
         <h4 class="qt">${q.title}</h4>
         <p class="qd">${q.desc}</p>
         <p class="qmeta">${q.tech.map(t => `<span class="chip">${t}</span>`).join("")}</p>
@@ -887,6 +928,161 @@
       }
     }, { threshold: .3 });
     Object.keys(achMap).forEach(id => { const el = document.getElementById(id); if (el) secIO.observe(el); });
+
+    /* ---------- galactic dogfights ---------- */
+    const bc = $("#battle"), bx = bc.getContext("2d");
+    function sizeBattle() { bc.width = innerWidth; bc.height = innerHeight; }
+    sizeBattle(); addEventListener("resize", sizeBattle);
+
+    // pixel sprites: rows of chars -> colors
+    const SPRITES = {
+      // rebel-style fighter, flies right
+      A: { s: 3, rows: [
+        "W.........",
+        "WW.....R..",
+        "CWWWWWWWW.",
+        ".WWWWWWWWW",
+        "CWWWWWWWW.",
+        "WW.....R..",
+        "W........."
+      ]},
+      // imperial-style fighter, flies left
+      B: { s: 3, rows: [
+        "D......D",
+        "D..WW..D",
+        "DWWWWWWD",
+        "D..WW..D",
+        "D......D"
+      ]},
+      // robed saber-wielder
+      J: { s: 3, rows: [
+        "..KK...",
+        "..FF...",
+        ".KKKK..",
+        "KKKKKK.",
+        ".KKKK..",
+        ".K..K..",
+        ".K..K.."
+      ]}
+    };
+    const PALETTE = { W: "#cbd5e1", R: "#fb7185", C: "#22d3ee", D: "#64748b", K: "#7c5c34", F: "#e8c39a" };
+    function drawSprite(sp, x, y, flip) {
+      const { s, rows } = sp;
+      for (let j = 0; j < rows.length; j++) {
+        const row = rows[j];
+        for (let i = 0; i < row.length; i++) {
+          const ch = flip ? row[row.length - 1 - i] : row[i];
+          if (ch !== ".") { bx.fillStyle = PALETTE[ch]; bx.fillRect(x + i * s, y + j * s, s, s); }
+        }
+      }
+    }
+
+    let ships = [], bolts = [], sparks = [], jedi = null, aceKills = 0;
+    function spawnDogfight() {
+      const h = bc.height;
+      const yA = 90 + Math.random() * (h - 300), yB = 90 + Math.random() * (h - 300);
+      ships.push(
+        { type: "A", x: -60, y: yA, vx: 2.2 + Math.random() * 1.2, hp: 3, bob: Math.random() * 6, cool: 0, alive: true },
+        { type: "B", x: bc.width + 60, y: yB, vx: -(2.2 + Math.random() * 1.2), hp: 3, bob: Math.random() * 6, cool: 30, alive: true }
+      );
+    }
+    function spawnJedi() { jedi = { x: -24, phase: 0 }; }
+    function explode(x, y) {
+      for (let i = 0; i < 26; i++) sparks.push({
+        x, y, vx: (Math.random() - .5) * 7, vy: (Math.random() - .5) * 7,
+        life: 30 + Math.random() * 22,
+        c: ["#fbbf24", "#fb7185", "#e2e8f0", "#f97316"][i % 4]
+      });
+    }
+    function shipCenter(sh) {
+      const sp = SPRITES[sh.type];
+      return [sh.x + sp.rows[0].length * sp.s / 2, sh.y + sp.rows.length * sp.s / 2];
+    }
+    function battleFrame() {
+      bx.clearRect(0, 0, bc.width, bc.height);
+      // ships
+      for (const sh of ships) {
+        if (!sh.alive) continue;
+        sh.x += sh.vx;
+        sh.y += Math.sin((sh.x + sh.bob * 60) / 60) * .8;
+        const foe = ships.find(o => o !== sh && o.alive && o.type !== sh.type);
+        if (foe && --sh.cool <= 0 && Math.abs(sh.x - foe.x) > 60 && Math.sign(foe.x - sh.x) === Math.sign(sh.vx)) {
+          const [cx1, cy1] = shipCenter(sh);
+          bolts.push({ x: cx1, y: cy1, vx: Math.sign(sh.vx) * 9, from: sh.type, c: sh.type === "A" ? "#4ade80" : "#f87171" });
+          sh.cool = 34 + Math.random() * 30;
+        }
+        // engine flare
+        const sp = SPRITES[sh.type], w = sp.rows[0].length * sp.s, hh = sp.rows.length * sp.s;
+        bx.fillStyle = sh.type === "A" ? "rgba(34,211,238,.8)" : "rgba(248,113,113,.8)";
+        const fx = sh.vx > 0 ? sh.x - 5 : sh.x + w + 1;
+        if (Math.random() > .3) bx.fillRect(fx, sh.y + hh / 2 - 2, 4, 4);
+        drawSprite(sp, sh.x, sh.y, sh.vx < 0 && sh.type === "A");
+      }
+      ships = ships.filter(sh => sh.alive && sh.x > -140 && sh.x < bc.width + 140);
+      // bolts
+      for (const b of bolts) {
+        b.x += b.vx;
+        // jedi deflection
+        if (jedi && Math.abs(b.x - jedi.x - 10) < 16 && b.y > bc.height - 90) {
+          b.vx = -b.vx; b.vy = -3; b.deflected = true;
+        }
+        if (b.vy) b.y += b.vy;
+        bx.save();
+        bx.shadowColor = b.c; bx.shadowBlur = 8; bx.fillStyle = b.c;
+        bx.fillRect(b.x, b.y - 1, 12 * Math.sign(b.vx), 3);
+        bx.restore();
+        for (const sh of ships) {
+          if (!sh.alive || sh.type === b.from || b.dead) continue;
+          const [cx2, cy2] = shipCenter(sh);
+          if (Math.abs(b.x - cx2) < 15 && Math.abs(b.y - cy2) < 13) {
+            b.dead = true; sh.hp--;
+            sparks.push({ x: b.x, y: b.y, vx: 0, vy: 0, life: 8, c: "#fff7d6" });
+            if (sh.hp <= 0) { sh.alive = false; explode(cx2, cy2); }
+          }
+        }
+      }
+      bolts = bolts.filter(b => !b.dead && b.x > -40 && b.x < bc.width + 40 && b.y > -40);
+      // sparks
+      for (const p of sparks) { p.x += p.vx; p.y += p.vy; p.vy += .12; p.life--; bx.globalAlpha = Math.max(p.life / 40, 0); bx.fillStyle = p.c; bx.fillRect(p.x, p.y, 3, 3); }
+      bx.globalAlpha = 1;
+      sparks = sparks.filter(p => p.life > 0);
+      // jedi walker with saber
+      if (jedi) {
+        jedi.x += 1.5; jedi.phase += .12;
+        const jy = bc.height - 66;
+        drawSprite(SPRITES.J, jedi.x, jy, false);
+        const ang = Math.sin(jedi.phase) * .8 - .5;
+        const sx = jedi.x + 17, sy = jy + 12;
+        bx.save();
+        bx.translate(sx, sy); bx.rotate(ang);
+        bx.shadowColor = "#4ade80"; bx.shadowBlur = 10;
+        bx.fillStyle = "#bbf7d0"; bx.fillRect(0, -1.5, 26, 3);
+        bx.restore();
+        if (jedi.x > bc.width + 30) jedi = null;
+      }
+      requestAnimationFrame(battleFrame);
+    }
+    if (!reduced) {
+      requestAnimationFrame(battleFrame);
+      setTimeout(spawnDogfight, 4000);
+      setInterval(() => { if (ships.length === 0) spawnDogfight(); }, 15000 + Math.random() * 8000);
+      setTimeout(spawnJedi, 22000);
+      setInterval(() => { if (!jedi) spawnJedi(); }, 45000 + Math.random() * 20000);
+      // click a ship to shoot it down
+      addEventListener("click", e => {
+        if (e.target.closest("a, button, nav, input")) return;
+        for (const sh of ships) {
+          if (!sh.alive) continue;
+          const [cx3, cy3] = shipCenter(sh);
+          if (Math.abs(e.clientX - cx3) < 30 && Math.abs(e.clientY - cy3) < 26) {
+            sh.alive = false; explode(cx3, cy3);
+            aceKills++;
+            if (aceKills === 1) achieve("ace", "ACE PILOT", "Fighter down — nice shot", 100);
+            else addCoins(25);
+          }
+        }
+      });
+    }
 
     /* ---------- konami ---------- */
     const code = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
