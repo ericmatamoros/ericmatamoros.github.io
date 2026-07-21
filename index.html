@@ -136,6 +136,29 @@
     .btn.gold { color: var(--gold); border-color: var(--gold); background: rgba(251,191,36,.06); }
     .btn.gold:hover { background: var(--gold); color: #2b1d02; box-shadow: 0 0 24px rgba(251,191,36,.5); }
 
+    /* ---------- game selector + themes ---------- */
+    .hud-games { display: flex; gap: 6px; }
+    .hud-games button {
+      font-size: 13px; line-height: 1; background: #0a1120; border: 2px solid var(--line);
+      padding: 4px 7px; cursor: pointer; transition: border-color .2s, box-shadow .2s;
+    }
+    .hud-games button:hover { border-color: var(--cyan); }
+    .hud-games button.on { border-color: var(--cyan); box-shadow: 0 0 10px rgba(34,211,238,.45); }
+
+    .game-select { margin-top: 36px; }
+    .gs-label { font-family: var(--px); font-size: 9px; color: var(--ink-dim); letter-spacing: 2px; margin-bottom: 14px; }
+    .gs-opt {
+      font-family: var(--px); font-size: 9px; letter-spacing: 1px; color: var(--ink-dim);
+      background: rgba(255,255,255,.02); border: 2px solid var(--line); padding: 11px 14px;
+      margin: 0 4px 8px; cursor: pointer; transition: all .2s;
+    }
+    .gs-opt:hover { color: var(--ink); border-color: var(--cyan); }
+    .gs-opt.on { color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 14px rgba(34,211,238,.35); }
+
+    body { transition: background .5s ease; }
+    body.theme-sea { --bg: #041520; --bg2: #06202e; --panel: #07222f; --panel2: #0a2c3e; --line: #155066; --cyan: #38bdf8; }
+    body.theme-farm { --bg: #0a0d07; --bg2: #0d1109; --panel: #111509; --panel2: #161c0e; --line: #2e3617; --cyan: #a3e635; }
+
     /* ---------- HERO / boot ---------- */
     #hero {
       max-width: none; min-height: 100svh; display: flex; flex-direction: column;
@@ -382,6 +405,11 @@
     <span class="hud-lv">LV <span id="hud-level">1</span></span>
     <div class="hud-xp" aria-hidden="true"><i id="hud-xp-fill"></i></div>
     <span class="hud-coins">🪙 <span id="hud-coins">0</span></span>
+    <div class="hud-games" aria-label="select game">
+      <button data-game="space" title="Space Invaders" aria-label="Space Invaders">🛸</button>
+      <button data-game="farm" title="Sheep Farm" aria-label="Sheep Farm">🐑</button>
+      <button data-game="sea" title="Sea Diving" aria-label="Sea Diving">🐠</button>
+    </div>
     <nav>
       <a href="#map">MAP</a>
       <a href="#boss">BOSS</a>
@@ -406,6 +434,12 @@
         business needs — from biochemistry labs to the AI companion running on
         HP's industrial presses.
       </p>
+      <div class="game-select" aria-label="select game">
+        <p class="gs-label">▸ SELECT GAME</p>
+        <button class="gs-opt" data-game="space" type="button">🛸 SPACE INVADERS</button>
+        <button class="gs-opt" data-game="farm" type="button">🐑 SHEEP FARM</button>
+        <button class="gs-opt" data-game="sea" type="button">🐠 SEA DIVING</button>
+      </div>
       <button id="press-start" type="button">▶ PRESS START</button>
     </div>
   </section>
@@ -760,27 +794,118 @@
     const $ = (s, el = document) => el.querySelector(s);
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    /* ---------- starfield ---------- */
+    /* ---------- game theme state ---------- */
+    let THEME = localStorage.getItem("emGame") || "space";
+    if (!["space", "farm", "sea"].includes(THEME)) THEME = "space";
+    document.body.classList.add("theme-" + THEME);
+
+    /* ---------- themed background: starfield / farm night / ocean ---------- */
     const cv = $("#stars"), cx = cv.getContext("2d");
-    let stars = [];
+    let stars = [], bgBubbles = [], flies = [], weeds = [];
     function sizeStars() {
       cv.width = innerWidth; cv.height = innerHeight;
       stars = Array.from({ length: Math.min(160, innerWidth / 8) }, () => ({
         x: Math.random() * cv.width, y: Math.random() * cv.height,
         z: Math.random() * 1.2 + .2, r: Math.random() * 1.4 + .3
       }));
+      bgBubbles = Array.from({ length: 26 }, () => ({
+        x: Math.random() * cv.width, y: Math.random() * cv.height,
+        r: 1 + Math.random() * 3, v: .25 + Math.random() * .7
+      }));
+      flies = Array.from({ length: 9 }, () => ({
+        x: Math.random() * cv.width, y: cv.height - 70 - Math.random() * 150, p: Math.random() * 6
+      }));
+      weeds = Array.from({ length: Math.max(6, Math.floor(cv.width / 140)) }, (_, i) => ({
+        x: 24 + i * 140 + Math.random() * 70, h: 34 + Math.random() * 48, p: Math.random() * 6
+      }));
     }
     sizeStars(); addEventListener("resize", sizeStars);
-    (function drawStars() {
-      cx.clearRect(0, 0, cv.width, cv.height);
-      for (const s of stars) {
-        cx.globalAlpha = .35 + s.z * .4;
-        cx.fillStyle = s.z > 1 ? "#9be8f7" : "#5b6b8c";
-        cx.fillRect(s.x, s.y, s.r, s.r);
-        if (!reduced) { s.y += s.z * .18; if (s.y > cv.height) s.y = -2; }
+
+    function drawFarmGround(t) {
+      const w = cv.width, h = cv.height;
+      // hills
+      cx.fillStyle = "#0c1108";
+      cx.beginPath(); cx.ellipse(w * .25, h + 30, w * .5, 90, 0, Math.PI, 0); cx.fill();
+      cx.beginPath(); cx.ellipse(w * .8, h + 40, w * .45, 120, 0, Math.PI, 0); cx.fill();
+      // ground strip
+      cx.fillStyle = "#0e1409"; cx.fillRect(0, h - 34, w, 34);
+      // barn, right side
+      const bx0 = w - 150, by0 = h - 34;
+      cx.fillStyle = "#2b1013";
+      cx.fillRect(bx0, by0 - 62, 96, 62);
+      cx.beginPath(); cx.moveTo(bx0 - 10, by0 - 62); cx.lineTo(bx0 + 48, by0 - 96); cx.lineTo(bx0 + 106, by0 - 62); cx.closePath(); cx.fill();
+      cx.fillStyle = "#170a0b"; cx.fillRect(bx0 + 36, by0 - 34, 24, 34);
+      cx.fillStyle = "rgba(251,191,36,.85)"; cx.fillRect(bx0 + 14, by0 - 52, 10, 10); // lit window
+      // fence, left side
+      cx.fillStyle = "#241a10";
+      for (let x = 16; x < Math.min(w * .45, 460); x += 34) {
+        cx.fillRect(x, h - 58, 5, 24);
       }
-      if (!reduced) requestAnimationFrame(drawStars);
-    })();
+      cx.fillRect(10, h - 54, Math.min(w * .45, 460), 4);
+      cx.fillRect(10, h - 44, Math.min(w * .45, 460), 4);
+      // hay bales
+      cx.fillStyle = "#4a3a12"; cx.fillRect(w * .5, h - 52, 26, 18); cx.fillRect(w * .52, h - 66, 20, 14);
+      // fireflies
+      for (const f of flies) {
+        if (!reduced) { f.p += .04; f.x += Math.sin(f.p * .7) * .5; f.y += Math.cos(f.p * .5) * .3; }
+        cx.globalAlpha = .35 + Math.abs(Math.sin(f.p)) * .6;
+        cx.fillStyle = "#d9f99d"; cx.fillRect(f.x, f.y, 2.5, 2.5);
+      }
+      cx.globalAlpha = 1;
+    }
+    function drawSeaScene(t) {
+      const w = cv.width, h = cv.height;
+      // light rays
+      for (let i = 0; i < 4; i++) {
+        const rx = w * (.15 + i * .24) + Math.sin(t * .3 + i * 2) * 40;
+        cx.globalAlpha = .05;
+        cx.fillStyle = "#a5f3fc";
+        cx.beginPath();
+        cx.moveTo(rx - 18, 0); cx.lineTo(rx + 18, 0);
+        cx.lineTo(rx + 90, h); cx.lineTo(rx - 90, h);
+        cx.closePath(); cx.fill();
+      }
+      cx.globalAlpha = 1;
+      // rising bubbles
+      cx.strokeStyle = "rgba(165,243,252,.4)";
+      for (const b of bgBubbles) {
+        if (!reduced) { b.y -= b.v; b.x += Math.sin(t + b.y * .02) * .3; if (b.y < -6) { b.y = h + 6; b.x = Math.random() * w; } }
+        cx.beginPath(); cx.arc(b.x, b.y, b.r, 0, 7); cx.stroke();
+      }
+      // sea floor
+      cx.fillStyle = "#0b1d26"; cx.fillRect(0, h - 30, w, 30);
+      // coral
+      cx.fillStyle = "#7f1d3a"; cx.fillRect(60, h - 48, 14, 18); cx.fillRect(78, h - 58, 10, 28);
+      cx.fillStyle = "#9d5b04"; cx.fillRect(w - 110, h - 46, 12, 16); cx.fillRect(w - 94, h - 54, 9, 24);
+      // seaweed
+      cx.strokeStyle = "#14532d"; cx.lineWidth = 4;
+      for (const wd of weeds) {
+        cx.beginPath(); cx.moveTo(wd.x, h - 26);
+        for (let s = 1; s <= 4; s++) {
+          cx.lineTo(wd.x + Math.sin(t * 1.2 + wd.p + s) * 6, h - 26 - (wd.h / 4) * s);
+        }
+        cx.stroke();
+      }
+      cx.lineWidth = 1;
+    }
+    function drawBg() {
+      const t = performance.now() / 1000;
+      cx.clearRect(0, 0, cv.width, cv.height);
+      if (THEME === "sea") {
+        drawSeaScene(t);
+      } else {
+        for (const s of stars) {
+          cx.globalAlpha = .35 + s.z * .4;
+          cx.fillStyle = THEME === "farm" ? (s.z > 1 ? "#f5f0c8" : "#6b7257") : (s.z > 1 ? "#9be8f7" : "#5b6b8c");
+          cx.fillRect(s.x, s.y, s.r, s.r);
+          if (!reduced && THEME === "space") { s.y += s.z * .18; if (s.y > cv.height) s.y = -2; }
+        }
+        cx.globalAlpha = 1;
+        if (THEME === "farm") drawFarmGround(t);
+      }
+      if (!reduced) requestAnimationFrame(drawBg);
+    }
+    drawBg();
 
     /* ---------- boot sequence ---------- */
     const bootLines = [
@@ -947,7 +1072,7 @@
     }, { threshold: .3 });
     Object.keys(achMap).forEach(id => { const el = document.getElementById(id); if (el) secIO.observe(el); });
 
-    /* ---------- galactic dogfights ---------- */
+    /* ---------- themed foreground: dogfights / farm / reef ---------- */
     const bc = $("#battle"), bx = bc.getContext("2d");
     function sizeBattle() { bc.width = innerWidth; bc.height = innerHeight; }
     sizeBattle(); addEventListener("resize", sizeBattle);
@@ -981,22 +1106,79 @@
         ".KKKK..",
         ".K..K..",
         ".K..K.."
+      ]},
+      // sheep, head to the right
+      SHEEP: { s: 3, rows: [
+        ".SSSSS..",
+        "SSSSSSkk",
+        "SSSSSSkk",
+        "SSSSSS..",
+        ".k...k..",
+        ".k...k.."
+      ]},
+      // cow, head to the right
+      COW: { s: 3, rows: [
+        ".WWkkWWWW..",
+        "WWWWWkWWWkk",
+        "WkkWWWWWWkk",
+        "WWWWWkWWWk.",
+        "WWWWWWWWW..",
+        ".k..PP..k..",
+        ".k......k.."
+      ]},
+      // tractor, drives right
+      TRACTOR: { s: 3, rows: [
+        "...RRRR.....",
+        "...RkkR.....",
+        "RRRRRRRRRR..",
+        "RRRRRRRRRRRR",
+        ".kk......kk.",
+        "kkkk....kkkk",
+        ".kk......kk."
+      ]},
+      // fish, swims right
+      FISH: { s: 3, rows: [
+        "O..OOOO.",
+        "OOOOOOOk",
+        "O..OOOO."
+      ]},
+      // shark, swims right
+      SHARK: { s: 3, rows: [
+        "......G.........",
+        ".....GG.....G...",
+        "GGGGGGGGGGGGG...",
+        "GGGGGGGGGGGGGGGk",
+        "wwGGGGGGGGGGG...",
+        "..ww....w.......",
+        "................"
+      ]},
+      // jellyfish
+      JELLY: { s: 3, rows: [
+        ".PPPP.",
+        "PPPPPP",
+        "PPPPPP",
+        "P.P.P."
       ]}
     };
-    const PALETTE = { W: "#cbd5e1", R: "#fb7185", C: "#22d3ee", D: "#64748b", K: "#7c5c34", F: "#e8c39a" };
-    function drawSprite(sp, x, y, flip) {
+    const PALETTE = {
+      W: "#cbd5e1", R: "#fb7185", C: "#22d3ee", D: "#64748b", K: "#7c5c34", F: "#e8c39a",
+      S: "#ece9da", k: "#1f2430", P: "#f0abfc", O: "#fb923c", G: "#8fa6bd", w: "#dbe7f3"
+    };
+    function drawSprite(sp, x, y, flip, tint) {
       const { s, rows } = sp;
       for (let j = 0; j < rows.length; j++) {
         const row = rows[j];
         for (let i = 0; i < row.length; i++) {
           const ch = flip ? row[row.length - 1 - i] : row[i];
-          if (ch !== ".") { bx.fillStyle = PALETTE[ch]; bx.fillRect(x + i * s, y + j * s, s, s); }
+          if (ch !== ".") { bx.fillStyle = (tint && tint[ch]) || PALETTE[ch]; bx.fillRect(x + i * s, y + j * s, s, s); }
         }
       }
     }
 
     let ships = [], bolts = [], sparks = [], jedi = null, aceKills = 0;
+    let crits = [], floatTexts = [], petTaps = 0, diveTaps = 0;
     function spawnDogfight() {
+      if (THEME !== "space") return;
       const h = bc.height;
       const yA = 90 + Math.random() * (h - 300), yB = 90 + Math.random() * (h - 300);
       ships.push(
@@ -1004,7 +1186,111 @@
         { type: "B", x: bc.width + 60, y: yB, vx: -(2.2 + Math.random() * 1.2), hp: 3, bob: Math.random() * 6, cool: 30, alive: true }
       );
     }
-    function spawnJedi() { jedi = { x: -24, phase: 0 }; }
+    function spawnJedi() { if (THEME === "space") jedi = { x: -24, phase: 0 }; }
+
+    function spawnCrit(kind) {
+      const w = bc.width, h = bc.height;
+      const dir = Math.random() < .5 ? 1 : -1;
+      const base = { kind, seed: Math.random() * 9, dead: false };
+      if (kind === "sheep" || kind === "cow") crits.push({ ...base, x: dir > 0 ? -70 : w + 70, vx: dir * (.35 + Math.random() * .3), pause: 0, jump: 0 });
+      else if (kind === "bird") crits.push({ ...base, x: dir > 0 ? -30 : w + 30, y: 80 + Math.random() * h * .5, vx: dir * (1.6 + Math.random()) });
+      else if (kind === "butterfly") crits.push({ ...base, x: dir > 0 ? -20 : w + 20, y: h * .25 + Math.random() * h * .5, vx: dir * .9, col: ["#e879f9", "#fbbf24", "#a3e635"][Math.floor(Math.random() * 3)] });
+      else if (kind === "tractor") crits.push({ ...base, x: dir > 0 ? -140 : w + 140, vx: dir * 1.1 });
+      else if (kind === "fish") {
+        const tint = [{ O: "#fb923c" }, { O: "#38bdf8" }, { O: "#fbbf24" }, { O: "#f472b6" }, { O: "#4ade80" }][Math.floor(Math.random() * 5)];
+        crits.push({ ...base, x: dir > 0 ? -40 : w + 40, y: 90 + Math.random() * (h - 220), vx: dir * (1 + Math.random() * 1.4), speed: 1 + Math.random() * 1.4, tint });
+      }
+      else if (kind === "jelly") crits.push({ ...base, x: 40 + Math.random() * (w - 80), y: h + 30 });
+      else if (kind === "shark") crits.push({ ...base, x: dir > 0 ? -180 : w + 180, y: 120 + Math.random() * Math.max(120, h - 320), vx: dir * (2.4 + Math.random()) });
+    }
+
+    function stepCrit(c, t) {
+      const w = bc.width, h = bc.height;
+      switch (c.kind) {
+        case "sheep": case "cow": {
+          const sp = SPRITES[c.kind === "sheep" ? "SHEEP" : "COW"];
+          let dy = 0;
+          if (c.jump > 0) { c.jump--; dy = -Math.sin(c.jump / 14 * Math.PI) * 16; }
+          if (c.pause > 0) c.pause--;
+          else {
+            c.x += c.vx;
+            if (Math.random() < .004) c.pause = 60 + Math.random() * 140;
+          }
+          const y = h - 34 - sp.rows.length * sp.s + dy + (c.pause > 0 ? Math.sin(t * 6 + c.seed) * 1.2 : 0);
+          c.cx = c.x + sp.rows[0].length * sp.s / 2; c.cy = y + sp.rows.length * sp.s / 2;
+          drawSprite(sp, c.x, y, c.vx < 0);
+          if (c.x < -90 || c.x > w + 90) c.dead = true;
+          break;
+        }
+        case "bird": {
+          c.x += c.vx; c.y += Math.sin(t * 3 + c.seed) * .8;
+          const flap = Math.sin(t * 14 + c.seed) * 4;
+          bx.strokeStyle = "#9aa8c4"; bx.lineWidth = 2;
+          bx.beginPath(); bx.moveTo(c.x - 6, c.y - flap); bx.lineTo(c.x, c.y); bx.lineTo(c.x + 6, c.y - flap); bx.stroke();
+          bx.lineWidth = 1;
+          if (c.x < -40 || c.x > w + 40) c.dead = true;
+          break;
+        }
+        case "butterfly": {
+          c.x += c.vx + Math.sin(t * 2 + c.seed) * 1.2; c.y += Math.cos(t * 1.7 + c.seed) * 1.4;
+          const f = Math.abs(Math.sin(t * 10 + c.seed)) * 2;
+          bx.fillStyle = c.col;
+          bx.fillRect(c.x - 3 - f, c.y - 2, 3, 5); bx.fillRect(c.x + 1 + f, c.y - 2, 3, 5);
+          bx.fillStyle = "#1f2430"; bx.fillRect(c.x, c.y - 1, 2, 4);
+          if (c.x < -30 || c.x > w + 30) c.dead = true;
+          break;
+        }
+        case "tractor": {
+          c.x += c.vx;
+          const sp = SPRITES.TRACTOR;
+          const y = h - 34 - sp.rows.length * sp.s + 6;
+          c.cx = c.x + 18; c.cy = y + 12;
+          drawSprite(sp, c.x, y, c.vx < 0);
+          if (Math.random() < .4) sparks.push({
+            x: c.vx > 0 ? c.x - 4 : c.x + sp.rows[0].length * sp.s + 4,
+            y: y + 16, vx: -c.vx * .3, vy: -.4, life: 14, c: "#57534e"
+          });
+          if (c.x < -160 || c.x > w + 160) c.dead = true;
+          break;
+        }
+        case "fish": {
+          c.x += c.vx; c.y += Math.sin(t * 2.2 + c.seed) * .7;
+          const sh = crits.find(o => o.kind === "shark" && !o.dead);
+          if (sh && Math.abs(sh.cx - c.x) < 150 && Math.abs(sh.cy - c.y) < 100) {
+            c.vx += Math.sign(c.x - sh.cx) * .35;
+            c.vx = Math.max(-4.5, Math.min(4.5, c.vx));
+          } else {
+            c.vx += (Math.sign(c.vx || 1) * c.speed - c.vx) * .02;
+          }
+          c.cx = c.x + 12; c.cy = c.y;
+          drawSprite(SPRITES.FISH, c.x, c.y - 4, c.vx < 0, c.tint);
+          if (c.x < -60 || c.x > w + 60) c.dead = true;
+          break;
+        }
+        case "jelly": {
+          c.y -= .35 + (Math.sin(t * 2 + c.seed) + 1) * .25; c.x += Math.sin(t + c.seed) * .4;
+          bx.globalAlpha = .85;
+          drawSprite(SPRITES.JELLY, c.x, c.y, false);
+          bx.strokeStyle = "#f0abfc"; bx.globalAlpha = .5;
+          for (let i = 0; i < 3; i++) {
+            bx.beginPath(); bx.moveTo(c.x + 3 + i * 6, c.y + 12);
+            bx.lineTo(c.x + 3 + i * 6 + Math.sin(t * 3 + i + c.seed) * 3, c.y + 20); bx.stroke();
+          }
+          bx.globalAlpha = 1;
+          c.cx = c.x + 9; c.cy = c.y + 8;
+          if (c.y < -40) c.dead = true;
+          break;
+        }
+        case "shark": {
+          c.x += c.vx; c.y += Math.sin(t * 1.4) * .5;
+          c.cx = c.x + 24; c.cy = c.y + 10;
+          drawSprite(SPRITES.SHARK, c.x, c.y, c.vx < 0);
+          if (c.x < -200 || c.x > w + 200) c.dead = true;
+          break;
+        }
+      }
+    }
+    function floatText(x, y, txt, col) { floatTexts.push({ x, y, txt, col, life: 60 }); }
     function explode(x, y) {
       for (let i = 0; i < 26; i++) sparks.push({
         x, y, vx: (Math.random() - .5) * 7, vy: (Math.random() - .5) * 7,
@@ -1064,6 +1350,19 @@
       for (const p of sparks) { p.x += p.vx; p.y += p.vy; p.vy += .12; p.life--; bx.globalAlpha = Math.max(p.life / 40, 0); bx.fillStyle = p.c; bx.fillRect(p.x, p.y, 3, 3); }
       bx.globalAlpha = 1;
       sparks = sparks.filter(p => p.life > 0);
+      // themed critters (farm & sea)
+      const tN = performance.now() / 1000;
+      for (const c of crits) if (!c.dead) stepCrit(c, tN);
+      crits = crits.filter(c => !c.dead);
+      // floating texts
+      bx.font = "9px 'Press Start 2P', monospace";
+      for (const ft of floatTexts) {
+        ft.y -= .8; ft.life--;
+        bx.globalAlpha = Math.min(1, ft.life / 30);
+        bx.fillStyle = ft.col; bx.fillText(ft.txt, ft.x, ft.y);
+      }
+      bx.globalAlpha = 1;
+      floatTexts = floatTexts.filter(f => f.life > 0);
       // jedi walker with saber
       if (jedi) {
         jedi.x += 1.5; jedi.phase += .12;
@@ -1080,23 +1379,85 @@
       }
       requestAnimationFrame(battleFrame);
     }
+    /* ---------- game switching + population director ---------- */
+    let lastFight = 0;
+    function resetEnts() { ships = []; bolts = []; sparks = []; crits = []; floatTexts = []; jedi = null; }
+    function populate(burst) {
+      if (reduced) return;
+      const count = k => crits.filter(c => c.kind === k && !c.dead).length;
+      if (THEME === "space") {
+        if (ships.length === 0 && (burst || Date.now() - lastFight > 12000)) { spawnDogfight(); lastFight = Date.now(); }
+      } else if (THEME === "farm") {
+        while (count("sheep") < 3) spawnCrit("sheep");
+        while (count("cow") < 1) spawnCrit("cow");
+        if (burst || Math.random() < .22) spawnCrit(Math.random() < .6 ? "butterfly" : "bird");
+        if (Math.random() < .02 && count("tractor") === 0) spawnCrit("tractor");
+      } else if (THEME === "sea") {
+        while (count("fish") < 8) spawnCrit("fish");
+        while (count("jelly") < 2) spawnCrit("jelly");
+        if ((burst && Math.random() < .5 || Math.random() < .04) && count("shark") === 0) spawnCrit("shark");
+      }
+    }
+    function applyGameButtons() {
+      document.querySelectorAll("[data-game]").forEach(b => b.classList.toggle("on", b.dataset.game === THEME));
+    }
+    function setGame(t) {
+      if (!["space", "farm", "sea"].includes(t) || t === THEME) { applyGameButtons(); return; }
+      document.body.classList.remove("theme-" + THEME);
+      THEME = t;
+      try { localStorage.setItem("emGame", t); } catch (e) {}
+      document.body.classList.add("theme-" + t);
+      applyGameButtons();
+      resetEnts();
+      populate(true);
+      if (reduced) drawBg();
+      achieve("swap-" + t, "CARTRIDGE SWAPPED", { space: "Space Invaders loaded", farm: "Sheep Farm loaded", sea: "Sea Diving loaded" }[t], 50);
+    }
+    document.querySelectorAll("[data-game]").forEach(b => b.addEventListener("click", () => setGame(b.dataset.game)));
+    applyGameButtons();
+
     if (!reduced) {
       requestAnimationFrame(battleFrame);
-      setTimeout(spawnDogfight, 4000);
-      setInterval(() => { if (ships.length === 0) spawnDogfight(); }, 15000 + Math.random() * 8000);
+      setTimeout(() => populate(true), 3000);
+      setInterval(() => populate(false), 2600);
       setTimeout(spawnJedi, 22000);
       setInterval(() => { if (!jedi) spawnJedi(); }, 45000 + Math.random() * 20000);
-      // click a ship to shoot it down
+      // click a critter: shoot down a fighter / pet the herd / poke the reef
       addEventListener("click", e => {
         if (e.target.closest("a, button, nav, input")) return;
-        for (const sh of ships) {
-          if (!sh.alive) continue;
-          const [cx3, cy3] = shipCenter(sh);
-          if (Math.abs(e.clientX - cx3) < 30 && Math.abs(e.clientY - cy3) < 26) {
-            sh.alive = false; explode(cx3, cy3);
-            aceKills++;
-            if (aceKills === 1) achieve("ace", "ACE PILOT", "Fighter down — nice shot", 100);
-            else addCoins(25);
+        const X = e.clientX, Y = e.clientY;
+        if (THEME === "space") {
+          for (const sh of ships) {
+            if (!sh.alive) continue;
+            const [cx3, cy3] = shipCenter(sh);
+            if (Math.abs(X - cx3) < 30 && Math.abs(Y - cy3) < 26) {
+              sh.alive = false; explode(cx3, cy3);
+              aceKills++;
+              if (aceKills === 1) achieve("ace", "ACE PILOT", "Fighter down — nice shot", 100);
+              else addCoins(25);
+            }
+          }
+          return;
+        }
+        for (const c of crits) {
+          if (c.dead || c.cx === undefined) continue;
+          if (Math.abs(X - c.cx) < 32 && Math.abs(Y - c.cy) < 28) {
+            if (c.kind === "sheep" || c.kind === "cow" || c.kind === "tractor") {
+              if (c.kind !== "tractor") c.jump = 14;
+              floatText(c.cx - 14, c.cy - 28, c.kind === "sheep" ? "BAA!" : c.kind === "cow" ? "MOO!" : "VROOM!", "#fbbf24");
+              petTaps++;
+              if (petTaps === 1) achieve("shepherd", "ANIMAL WHISPERER", "The flock accepts you", 100);
+              else addCoins(10);
+            } else if (c.kind === "fish" || c.kind === "jelly" || c.kind === "shark") {
+              for (let i = 0; i < 8; i++) sparks.push({
+                x: c.cx, y: c.cy, vx: (Math.random() - .5) * 3, vy: -1 - Math.random() * 2, life: 26, c: "#a5f3fc"
+              });
+              if (c.kind === "shark") floatText(c.cx - 16, c.cy - 22, "CHOMP!", "#fb7185");
+              diveTaps++;
+              if (diveTaps === 1) achieve("diver", "DEEP DIVER", "You poked the reef", 100);
+              else addCoins(10);
+            }
+            break;
           }
         }
       });
