@@ -213,6 +213,11 @@
     .lvl.done .lvl-tag { color: var(--green); }
     .lvl.boss .lvl-tag { color: var(--gold); }
     .lvl h3 { font-family: var(--px); font-size: 14px; line-height: 1.8; color: var(--ink); margin-bottom: 10px; }
+    .lvl-logo {
+      height: 30px; padding: 5px 9px; background: #fff; border-radius: 4px;
+      display: inline-block; vertical-align: middle; margin-right: 12px;
+    }
+    .lvl-logo img { height: 100%; display: block; }
     .lvl p { color: var(--ink-dim); font-size: 15px; max-width: 720px; }
     .lvl .loot { margin-top: 12px; }
     .you-are-here {
@@ -375,7 +380,7 @@
       <h1 class="hero-title">ERIC<br />MATAMOROS</h1>
       <p class="hero-class">
         CLASS: <b>AI-FIRST PRODUCT BUILDER</b><br />
-        GUILD: <b>TECHNICAL LEAD @ HP</b> · MAIN QUEST: <b>HP NIO</b>
+        GUILD: <b>TECHNICAL LEAD AI @ HP</b> · MAIN QUEST: <b>HP NIO</b>
       </p>
       <p class="hero-tagline">
         I build <em>AI-first products</em> that drive innovation and solve real
@@ -411,40 +416,32 @@
         <span class="node" aria-hidden="true"></span>
         <p class="lvl-tag">LEVEL 1 · TUTORIAL ZONE · CLEARED</p>
         <h3>BSc BIOCHEMISTRY</h3>
-        <p>Learned the original source code: proteins, pathways and lab data. First scripts written to stop doing spreadsheets by hand — the moment the real skill tree opened.</p>
+        <p>Universitat de Barcelona, 2017–2021. Learned the original source code: proteins, pathways and lab data. Final thesis (9.2/10) built a tool to estimate RNA tertiary structure — the moment code took over the run.</p>
         <div class="loot"><span class="chip">Scientific method</span><span class="chip">First code</span><span class="chip">Data literacy</span></div>
       </article>
 
       <article class="lvl panel done reveal">
         <span class="node" aria-hidden="true"></span>
         <p class="lvl-tag">LEVEL 2 · RESEARCH CAVES · CLEARED</p>
-        <h3>MSc BIOINFORMATICS &amp; BIOSTATISTICS</h3>
-        <p>Grinded statistics and machine learning on biological data. Contributed to open-source scientific software: veriNA3d (nucleic-acid structural analysis, IRB Barcelona) and REpiFRIenDs (epidemic outbreak detection).</p>
-        <div class="loot"><span class="chip">R</span><span class="chip">Python</span><span class="chip">Statistics</span><span class="chip">Open source</span></div>
+        <h3>COMPUTATIONAL BIOLOGIST @ IRB BARCELONA</h3>
+        <p>2019–2021: estimated RNA tertiary structure with Monte Carlo simulations, an ML-learned force field and Bayesian-scored pseudo-torsional angles. Levelled up with an MSc in Bioinformatics &amp; Biostatistics (thesis 9.3/10: EpiFRIenDs malaria-hotspot detection) and a postgraduate in AI &amp; Deep Learning at UPC. Contributed to the veriNA3d and REpiFRIenDs open-source packages.</p>
+        <div class="loot"><span class="chip">R</span><span class="chip">Python</span><span class="chip">Monte Carlo</span><span class="chip">Open source</span></div>
       </article>
 
       <article class="lvl panel done reveal">
         <span class="node" aria-hidden="true"></span>
-        <p class="lvl-tag">LEVEL 3 · SIDE QUEST GUILD · CLEARED</p>
-        <h3>ENTREPRENEURIAL VENTURES</h3>
-        <p>Three side quests shipped: biop.ai (computer vision for skin-cancer detection), Nutrilieve (LLM-built nutrition database for cancer patients, with onco-nutritionists) and Estate Tracker (price analytics for the Spanish real-estate market).</p>
-        <div class="loot"><span class="chip">Computer vision</span><span class="chip">LLMs</span><span class="chip">Product building</span><span class="chip">0→1</span></div>
-      </article>
-
-      <article class="lvl panel done reveal">
-        <span class="node" aria-hidden="true"></span>
-        <p class="lvl-tag">LEVEL 4 · CORPORATE FORTRESS · CLEARED</p>
-        <h3>SENIOR DATA SCIENTIST @ NOVARTIS</h3>
-        <p>Digital Finance Hub. Brought AI to pharma-scale forecasting and finance: efficiency, precision and execution speed as measurable loot. Certified along the way in Deep Learning, AWS and industrialization of data-driven products.</p>
-        <div class="loot"><span class="chip">Forecasting</span><span class="chip">AWS</span><span class="chip">MLOps</span><span class="chip">Deep Learning</span></div>
+        <p class="lvl-tag">LEVEL 3 · CORPORATE FORTRESS · CLEARED</p>
+        <h3><span class="lvl-logo"><img src="./assets/novartis-logo.svg" alt="Novartis logo" /></span>DATA SCIENTIST @ NOVARTIS</h3>
+        <p>Five-year campaign (2020–2025), levelling from Trainee to Senior. Built and fully industrialized the Sales Forecasting engine covering 3,000+ country-drug products, modelled product lifecycle-transition impact, ran stakeholder workshops across three continents and served as Technical Lead of the Novartis Datathon 2022 (50+ international teams). Final quest in Basel: LLM architectures for in-silico gene-expression perturbation in the Immunology group.</p>
+        <div class="loot"><span class="chip">Forecasting</span><span class="chip">LLMs</span><span class="chip">MLOps</span><span class="chip">AWS</span><span class="chip">Leadership</span></div>
       </article>
 
       <article class="lvl panel boss reveal">
         <span class="node" aria-hidden="true"></span>
-        <p class="lvl-tag">LEVEL 5 · BOSS LEVEL · IN PROGRESS</p>
-        <h3>TECHNICAL LEAD @ HP <span class="you-are-here">YOU ARE HERE</span></h3>
-        <p>Technical lead and core developer of HP Nio — the AI-powered companion for HP's industrial digital presses. Leading the engineering of GenAI that thousands of print professionals talk to at work. Scroll down to meet the boss.</p>
-        <div class="loot"><span class="chip">GenAI</span><span class="chip">LLM systems</span><span class="chip">Technical leadership</span><span class="chip">AI-first product</span></div>
+        <p class="lvl-tag">LEVEL 4 · BOSS LEVEL · IN PROGRESS</p>
+        <h3><span class="lvl-logo"><img src="./assets/hp-logo.svg" alt="HP logo" /></span>TECHNICAL LEAD AI @ HP <span class="you-are-here">YOU ARE HERE</span></h3>
+        <p>Joined in January 2025 as Senior AI Engineer on the core of HP Nio. Since April 2026: Technical Lead AI, leading a team of six AI engineers expanding Nio's capabilities into new domains and business units — Large Format, 3D and Sales. Scroll down to meet the boss.</p>
+        <div class="loot"><span class="chip">GenAI</span><span class="chip">LLM systems</span><span class="chip">Team of 6</span><span class="chip">AI-first product</span></div>
       </article>
     </div>
   </section>
@@ -457,7 +454,7 @@
       <div class="frame-inner">
         <span class="boss-ribbon">CURRENT MAIN QUEST · LIVE IN PRODUCTION</span>
         <h3 class="boss-name">HP NIO — AI-POWERED COMPANION</h3>
-        <p class="boss-role">ROLE: TECHNICAL LEAD &amp; CORE DEVELOPER</p>
+        <p class="boss-role">ROLE: TECHNICAL LEAD AI · CORE DEVELOPER · SQUAD OF 6</p>
 
         <div class="boss-hp">
           <p class="lbl">QUEST PROGRESS — SHIPPED &amp; EVOLVING</p>
@@ -471,10 +468,11 @@
           step by step, and surfaces bottlenecks across entire fleets — through a conversation.
         </p>
         <p class="desc">
-          As technical lead I drive its architecture and core development: the kind of
-          <b>AI-first product</b> I care about — not a demo, not a chatbot bolted on top, but GenAI
-          engineered into an industrial workflow where downtime costs real money and answers
-          have to be right.
+          I've been on Nio's core development since January 2025, and since April 2026 I lead a
+          team of six AI engineers expanding it across HP's business units — Large Format, 3D and
+          Sales. It's the kind of <b>AI-first product</b> I care about: not a demo, not a chatbot
+          bolted on top, but GenAI engineered into an industrial workflow where downtime costs
+          real money and answers have to be right.
         </p>
 
         <blockquote class="boss-quote">"Your next step in digital print productivity isn't a system upgrade. It's a conversation."</blockquote>
@@ -632,52 +630,59 @@
       ],
       vibecoded: [
         {
+          title: "JIRASAN UNIVERSE",
+          desc: "A comprehensive set of games, socials and quests for the Jirasan NFT ecosystem — one universe of characters, stories and community. Your identity in a new world.",
+          tech: ["TypeScript", "Web3", "Games"],
+          meta: "15+ repos · jirasan.io",
+          url: "https://jirasan.io"
+        },
+        {
           title: "REDACTED CINEFI",
-          desc: "Full financials platform for film financing — the most-committed repo in the entire fleet, designed, directed and shipped AI-paired.",
-          tech: ["TypeScript", "Next.js"],
+          desc: "Financial dashboard for Web3-funded films with guaranteed ROI — digital passes, portfolio value and returns of tokenized film investments in one place.",
+          tech: ["TypeScript", "Next.js", "Web3"],
           meta: "203 commits · 🔒 private repo · app live",
           url: "https://redacted-cinefi.vercel.app"
         },
         {
-          title: "JIRASAN UNIVERSE",
-          desc: "A 15-repo web3 gaming ecosystem: arcade games (Rats Revenge, Bomber X, MegaJEET), runners, sliders and a community hub — all AI-paired builds.",
-          tech: ["TypeScript", "Web3", "Games"],
-          meta: "15+ repos · community hub live",
-          url: "https://jirasan-webpage-web.vercel.app"
+          title: "FOMO CUP",
+          desc: "World Cup prediction game for the Jirasan ecosystem: match board, live odds and bet slips — support your nation with Jiras in jerseys.",
+          tech: ["TypeScript", "Games"],
+          meta: "🔒 private repo · app live",
+          url: "https://jira-fifa.vercel.app"
         },
         {
-          title: "STICKERS PLATFORM",
-          desc: "Create and ship your own sticker sets straight from the browser.",
-          tech: ["TypeScript"],
-          meta: "13 commits · public · app live",
-          url: "https://stickers-platform.vercel.app"
+          title: "TOMOGOCHI",
+          desc: "A new battle, amazing creatures: capture at the gate, trade on the market, fill your Togedex and fight your way up with $TOMO on the line.",
+          tech: ["TypeScript", "Games", "Web3"],
+          meta: "app live",
+          url: "https://tomogochi.vercel.app/"
         },
         {
           title: "WORTHIT",
-          desc: "A product idea iterated at AI speed — five repos of evolution from landing page to working Svelte app.",
-          tech: ["Svelte"],
+          desc: "A fair shot at attention: paid DMs, booths and crews running on Solana escrow. Money moves when the work happens — if it doesn't, automatic refund.",
+          tech: ["Svelte", "Solana"],
           meta: "5 iterations · app live",
           url: "https://worthit-seven.vercel.app"
         },
         {
-          title: "BUILD AI BOOTCAMP",
-          desc: "Teaching people how to build with AI — a bootcamp site that practices exactly what it preaches.",
-          tech: ["JavaScript"],
-          meta: "25 commits · app live",
-          url: "https://buildaibootcamp.vercel.app"
+          title: "CRYPTOWAY",
+          desc: "Frontier AI, paid from your wallet: one USDC-funded API key for Claude Code or any SDK — no card, no subscription, every token metered on your ledger.",
+          tech: ["TypeScript", "Base", "Claude API"],
+          meta: "in the forge · launching soon",
+          url: ""
         },
         {
-          title: "BAYC MAP",
-          desc: "Interactive map explorer for the Bored Ape NFT collection — freshly pushed this week.",
-          tech: ["TypeScript"],
+          title: "NFT HOLDER ATLAS",
+          desc: "Global atlas for NFT communities: holder pins, events and businesses across collections — Apes, Punks, Penguins and more — all on one map.",
+          tech: ["TypeScript", "Maps"],
           meta: "26 commits · app live",
           url: "https://bayc-map.vercel.app"
         },
         {
           title: "HUMANOID",
-          desc: "The freshest drop from the lab — a web experiment pushed to production this month.",
-          tech: ["CSS", "HTML"],
-          meta: "public · app live",
+          desc: "Agentic identity drop: 3,333 humanoids with agentic traits, building a world where surrender is quiet and automation has a face.",
+          tech: ["CSS", "HTML", "Web3"],
+          meta: "public · whitelist open",
           url: "https://humanoid-nu.vercel.app"
         },
         {
@@ -778,7 +783,9 @@
         <p class="qd">${q.desc}</p>
         <p class="qmeta">${q.tech.map(t => `<span class="chip">${t}</span>`).join("")}</p>
         <p class="qmeta">${q.meta || ""}</p>
-        <a class="qlink" href="${q.url}" target="_blank" rel="noopener noreferrer">OPEN QUEST →</a>
+        ${q.url
+          ? `<a class="qlink" href="${q.url}" target="_blank" rel="noopener noreferrer">OPEN QUEST →</a>`
+          : `<span class="qlink" style="color:var(--ink-mute);cursor:default">⚒ IN THE FORGE</span>`}
       </article>`;
     $("#quests-hand").innerHTML = SITE_DATA.handcrafted.map(questCard).join("");
     $("#quests-vibe").innerHTML = SITE_DATA.vibecoded.map(questCard).join("");
