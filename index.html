@@ -1,418 +1,911 @@
-<!-- HELLO
--
-DevFolio is a minimal, clean, lightweight and fully responsive template for Devlopers!
-Created by Anil Seervi.
--
-GitHub repo: https://github.com/AnilSeervi/DevFolio
-README: https://github.com/AnilSeervi/DevFolio/blob/master/README.md
--
-Have fun creating your portfolio on this template!!! -->
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eric Matamoros — AI-First Product Builder · Technical Lead @ HP</title>
+  <meta name="description" content="Eric Matamoros — Technical Lead at HP and core developer of HP Nio, the AI-powered companion for industrial print production. I build AI-first products that drive innovation and solve real business needs." />
+  <meta name="keywords" content="Eric Matamoros, AI, GenAI, LLM, Data Science, HP Nio, Technical Lead, Machine Learning, AI-first products" />
+  <meta name="theme-color" content="#07090f" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕹️</text></svg>" />
 
-    <!-- Title: add your Portfolio websites's title here -->
-    <title>Eric Matamoros | Senior Data Scientist</title>
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://ericmatamoros.github.io/" />
+  <meta property="og:title" content="Eric Matamoros — AI-First Product Builder · Technical Lead @ HP" />
+  <meta property="og:description" content="Career as a game: from biochemistry to leading HP Nio, the AI-powered companion for industrial print production. Press START." />
+  <meta property="og:image" content="https://ericmatamoros.github.io/assets/profile.jpeg" />
+  <meta property="twitter:card" content="summary" />
 
-    <!-- Add some coding keywords below, Ex: (javascript, yourusername, etc) -->
-    <meta name="keywords" content="[username], [name], skill" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
 
-    <!-- Improve your SEO by adding a small descrption of you -->
-    <meta name="description" content="[Your name here] | Developer" />
+  <style>
+    :root {
+      --bg: #07090f;
+      --bg2: #0a0e1a;
+      --panel: #0d1424;
+      --panel2: #101a30;
+      --line: #1e2b4a;
+      --ink: #e2e8f0;
+      --ink-dim: #8fa3c4;
+      --ink-mute: #5b6b8c;
+      --cyan: #22d3ee;
+      --magenta: #e879f9;
+      --gold: #fbbf24;
+      --green: #34d399;
+      --red: #fb7185;
+      --px: "Press Start 2P", monospace;
+      --mono: "JetBrains Mono", monospace;
+      --body: "Space Grotesk", system-ui, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--body);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    ::selection { background: var(--cyan); color: #06222a; }
 
-    <!-- Add a your png Logo to the assets folder and change the href attr accordingly  -->
-    <link rel="icon" type="image/png" href="./assets/devfolio-logo.png" />
+    /* ---------- backdrop: starfield + scanlines + vignette ---------- */
+    #stars { position: fixed; inset: 0; z-index: -3; }
+    .scanlines {
+      position: fixed; inset: 0; z-index: 50; pointer-events: none;
+      background: repeating-linear-gradient(to bottom, rgba(255,255,255,.028) 0 1px, transparent 1px 3px);
+      mix-blend-mode: overlay;
+    }
+    .vignette {
+      position: fixed; inset: 0; z-index: 49; pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55) 100%);
+    }
 
-    <!-- Add your primary-theme color for the value of content -->
-    <meta name="theme-color" content="#36d1dc" />
+    /* ---------- HUD ---------- */
+    #hud {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; gap: 14px;
+      padding: 10px 16px;
+      background: rgba(7,9,15,.88);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+      font-family: var(--px); font-size: 9px;
+      transform: translateY(-110%);
+      transition: transform .5s ease;
+    }
+    #hud.on { transform: translateY(0); }
+    .hud-name { color: var(--cyan); letter-spacing: 1px; white-space: nowrap; }
+    .hud-lv { color: var(--gold); white-space: nowrap; }
+    .hud-xp { flex: 1 1 90px; max-width: 240px; height: 10px; border: 2px solid var(--line); background: #0a1120; position: relative; }
+    .hud-xp i {
+      position: absolute; inset: 0; width: 0%;
+      background: linear-gradient(90deg, var(--cyan), var(--magenta));
+      transition: width .2s linear;
+    }
+    .hud-coins { color: var(--gold); white-space: nowrap; }
+    #hud nav { margin-left: auto; display: flex; gap: 14px; }
+    #hud nav a { color: var(--ink-dim); text-decoration: none; transition: color .2s; }
+    #hud nav a:hover, #hud nav a.here { color: var(--cyan); text-shadow: 0 0 8px rgba(34,211,238,.7); }
+    @media (max-width: 860px) { #hud nav { display: none; } .hud-xp { max-width: none; } }
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <!-- Fill content with the URL of this portfolio you'll host -->
-    <meta property="og:url" content="https://devfolio.js.org/" />
-    <!-- Fill content with the title of your portfolio(Recommended to use what you put in <title> tag) -->
-    <meta property="og:title" content="[Your name here] | Developer" />
-    <!-- Give a short description that'll show up when you/someone shares your portfolio on different platform -->
-    <meta property="og:description" content="Made using DevFolio Template" />
-    <!-- Add a thumbnail image in assets folder and fill the content attr with URL to that thumbnail 
-      so that a thumbnail image of your portfolio is shown while shared on other platform -->
-    <meta
-      property="og:image"
-      content="https://devfolio.js.org/assets/devfolio.png"
-    />
+    /* ---------- shared layout ---------- */
+    section { position: relative; padding: 110px 20px; max-width: 1080px; margin: 0 auto; }
+    .sec-tag {
+      font-family: var(--px); font-size: 10px; color: var(--magenta);
+      letter-spacing: 2px; margin-bottom: 14px;
+    }
+    .sec-title {
+      font-family: var(--px); font-size: clamp(18px, 4vw, 30px);
+      color: var(--ink); line-height: 1.5; margin-bottom: 18px;
+      text-shadow: 3px 3px 0 rgba(232,121,249,.25);
+    }
+    .sec-sub { color: var(--ink-dim); max-width: 640px; margin-bottom: 40px; font-size: 17px; }
+    .panel {
+      background: linear-gradient(180deg, var(--panel), var(--panel2));
+      border: 1px solid var(--line);
+      box-shadow: 0 0 0 1px rgba(34,211,238,.05), 0 14px 40px rgba(0,0,0,.45);
+      position: relative;
+    }
+    .panel::before, .panel::after {
+      content: ""; position: absolute; width: 10px; height: 10px; pointer-events: none;
+    }
+    .panel::before { top: -1px; left: -1px; border-top: 2px solid var(--cyan); border-left: 2px solid var(--cyan); }
+    .panel::after { bottom: -1px; right: -1px; border-bottom: 2px solid var(--magenta); border-right: 2px solid var(--magenta); }
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <!-- Again fill content attr with the URL of this portfolio you'll host -->
-    <meta property="twitter:url" content="https://devfolio.js.org" />
-    <!-- Recommended to use the same text used within <title> element -->
-    <meta property="twitter:title" content="[Your name here] | Developer" />
-    <!-- short description that shows up while your portfolio is shared -->
-    <meta
-      property="twitter:description"
-      content="Made using DevFolio Template"
-    />
-    <!-- Fill content with the URL to the thumbnail image that you'll put in the assets folder -->
-    <meta
-      property="twitter:image"
-      content="https://anilseervi.vercel.app/assets/devfolio.png"
-    />
+    .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in { opacity: 1; transform: none; }
 
-    <!-- link tags -->
-    <link rel="preload" as="style" href="./css/main.css" />
-    <link rel="stylesheet" href="./css/main.css" />
+    .chip {
+      display: inline-block; font-family: var(--mono); font-size: 12px;
+      padding: 3px 10px; border: 1px solid var(--line); color: var(--ink-dim);
+      background: rgba(34,211,238,.05); border-radius: 3px; margin: 3px 4px 3px 0;
+    }
 
-    <!-- FontAwesome Icons link -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
-      integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <script defer src="./javascript/scrollreveal.min.js"></script>
-    <script
-      defer
-      type="text/javascript"
-      src="./javascript/scrollveal.js"
-    ></script>
+    .btn {
+      display: inline-block; font-family: var(--px); font-size: 10px;
+      padding: 14px 20px; color: var(--cyan); text-decoration: none;
+      border: 2px solid var(--cyan); background: rgba(34,211,238,.06);
+      letter-spacing: 1px; transition: all .2s; cursor: pointer;
+    }
+    .btn:hover { background: var(--cyan); color: #04222b; box-shadow: 0 0 24px rgba(34,211,238,.5); }
+    .btn.alt { color: var(--magenta); border-color: var(--magenta); background: rgba(232,121,249,.06); }
+    .btn.alt:hover { background: var(--magenta); color: #2b0430; box-shadow: 0 0 24px rgba(232,121,249,.5); }
+    .btn.gold { color: var(--gold); border-color: var(--gold); background: rgba(251,191,36,.06); }
+    .btn.gold:hover { background: var(--gold); color: #2b1d02; box-shadow: 0 0 24px rgba(251,191,36,.5); }
 
-    <!-- Remove Google Analytics once you have your portfolio website set-up -->
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=UA-122228201-4"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || []
-      function gtag() {
-        dataLayer.push(arguments)
-      }
-      gtag("js", new Date())
+    /* ---------- HERO / boot ---------- */
+    #hero {
+      max-width: none; min-height: 100svh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center; padding-top: 60px;
+    }
+    #boot {
+      font-family: var(--mono); font-size: 14px; text-align: left;
+      color: var(--green); min-height: 180px; width: min(620px, 92vw);
+      margin-bottom: 34px;
+    }
+    #boot .ok { color: var(--cyan); }
+    #boot .warn { color: var(--gold); }
+    #boot .cursor { display: inline-block; width: 9px; height: 16px; background: var(--green); vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
 
-      gtag("config", "UA-122228201-4")
-    </script>
-    <!-- End of Google Analytics -->
-  </head>
-  <body>
-    <!-- Hero Section -->
-    <div id="hero">
-      <section class="container">
-        <h1 class="hero-title">
-          Hi, my name is <span class="text-color-main name">Eric Matamoros</span>
-          <br />
-          I'm a Senior Data Scientist
-        </h1>
-        <p class="hero-cta">
-          <a class="cta-btn cta-btn--hero" href="#about">Know more</a>
-        </p>
-      </section>
-      <a href="#about" class="scroll-down-link" aria-label="scroll-down">
-        <div class="scroll-down"></div
-      ></a>
+    .hero-main { opacity: 0; transform: scale(.96); transition: opacity .8s ease, transform .8s ease; }
+    .hero-main.show { opacity: 1; transform: none; }
+    .hero-title {
+      font-family: var(--px); font-size: clamp(26px, 6vw, 56px);
+      line-height: 1.4; color: var(--ink); position: relative;
+      text-shadow: 4px 4px 0 rgba(34,211,238,.35), -4px -4px 0 rgba(232,121,249,.25);
+      animation: glitch 6s infinite;
+    }
+    @keyframes glitch {
+      0%, 93%, 100% { transform: none; filter: none; }
+      94% { transform: translate(-2px, 1px) skewX(2deg); filter: hue-rotate(40deg); }
+      95% { transform: translate(2px, -1px); filter: none; }
+      96% { transform: translate(-1px, 0) skewX(-1deg); filter: hue-rotate(-40deg); }
+      97% { transform: none; filter: none; }
+    }
+    .hero-class {
+      font-family: var(--px); font-size: clamp(9px, 1.8vw, 13px);
+      color: var(--gold); margin-top: 22px; line-height: 2.1; letter-spacing: 1px;
+    }
+    .hero-class b { color: var(--cyan); font-weight: normal; }
+    .hero-tagline { color: var(--ink-dim); font-size: clamp(15px, 2.2vw, 19px); max-width: 620px; margin: 22px auto 0; }
+    .hero-tagline em { color: var(--ink); font-style: normal; border-bottom: 2px solid var(--magenta); }
+    #press-start {
+      margin-top: 44px; font-family: var(--px); font-size: 13px; color: var(--cyan);
+      background: none; border: none; cursor: pointer; letter-spacing: 2px;
+      animation: pulse 1.4s ease-in-out infinite;
+      text-shadow: 0 0 12px rgba(34,211,238,.8);
+    }
+    @keyframes pulse { 50% { opacity: .25; } }
+
+    /* ---------- WORLD MAP / career ---------- */
+    .player-card {
+      display: flex; gap: 20px; align-items: center; padding: 20px 24px;
+      margin-bottom: 56px; flex-wrap: wrap;
+    }
+    .player-card img {
+      width: 92px; height: 92px; object-fit: cover;
+      image-rendering: pixelated; filter: contrast(1.08) saturate(1.15);
+      border: 3px solid var(--cyan); box-shadow: 4px 4px 0 rgba(232,121,249,.5);
+    }
+    .player-card .pc-info { font-family: var(--mono); font-size: 14px; color: var(--ink-dim); }
+    .player-card .pc-info b { color: var(--ink); font-size: 16px; }
+    .player-card .pc-stats { margin-left: auto; font-family: var(--px); font-size: 9px; line-height: 2.4; color: var(--ink-dim); }
+    .player-card .pc-stats span { color: var(--gold); }
+    @media (max-width: 700px) { .player-card .pc-stats { margin-left: 0; } }
+
+    .map { position: relative; padding-left: 34px; }
+    .map::before {
+      content: ""; position: absolute; left: 12px; top: 8px; bottom: 8px; width: 4px;
+      background: repeating-linear-gradient(to bottom, var(--line) 0 10px, transparent 10px 18px);
+    }
+    .lvl { position: relative; margin-bottom: 34px; padding: 22px 24px; }
+    .lvl .node {
+      position: absolute; left: -34px; top: 24px; width: 24px; height: 24px;
+      background: var(--panel); border: 3px solid var(--cyan); transform: translateX(-7px) rotate(45deg);
+    }
+    .lvl.done .node { border-color: var(--green); background: rgba(52,211,153,.2); }
+    .lvl.boss .node { border-color: var(--gold); background: rgba(251,191,36,.25); animation: nodepulse 1.6s ease-in-out infinite; }
+    @keyframes nodepulse { 50% { box-shadow: 0 0 18px rgba(251,191,36,.8); } }
+    .lvl-tag { font-family: var(--px); font-size: 9px; color: var(--magenta); letter-spacing: 1px; margin-bottom: 10px; }
+    .lvl.done .lvl-tag { color: var(--green); }
+    .lvl.boss .lvl-tag { color: var(--gold); }
+    .lvl h3 { font-family: var(--px); font-size: 14px; line-height: 1.8; color: var(--ink); margin-bottom: 10px; }
+    .lvl p { color: var(--ink-dim); font-size: 15px; max-width: 720px; }
+    .lvl .loot { margin-top: 12px; }
+    .you-are-here {
+      display: inline-block; font-family: var(--px); font-size: 8px; color: #2b1d02;
+      background: var(--gold); padding: 4px 8px; margin-left: 10px; vertical-align: middle;
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+
+    /* ---------- BOSS / HP Nio ---------- */
+    #boss .frame {
+      padding: 3px; position: relative; overflow: hidden;
+      background: linear-gradient(120deg, var(--cyan), var(--magenta), var(--gold), var(--cyan));
+      background-size: 300% 300%; animation: borderflow 8s linear infinite;
+    }
+    @keyframes borderflow { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+    #boss .frame-inner { background: var(--bg2); padding: clamp(24px, 5vw, 48px); }
+    .boss-ribbon {
+      font-family: var(--px); font-size: 9px; letter-spacing: 2px; color: #2b0430;
+      background: var(--magenta); display: inline-block; padding: 6px 12px; margin-bottom: 22px;
+    }
+    .boss-name { font-family: var(--px); font-size: clamp(16px, 3.4vw, 26px); line-height: 1.6; color: var(--ink); margin-bottom: 6px; }
+    .boss-role { font-family: var(--mono); color: var(--gold); font-size: 15px; margin-bottom: 22px; }
+    .boss-hp { margin: 18px 0 26px; }
+    .boss-hp .lbl { font-family: var(--px); font-size: 8px; color: var(--ink-dim); margin-bottom: 8px; letter-spacing: 1px; }
+    .boss-hp .bar { height: 16px; border: 2px solid var(--line); background: #0a1120; position: relative; max-width: 520px; }
+    .boss-hp .bar i {
+      position: absolute; inset: 0; width: 0%;
+      background: repeating-linear-gradient(90deg, var(--green) 0 14px, #2bbd85 14px 16px);
+      transition: width 1.6s cubic-bezier(.2,.7,.2,1);
+    }
+    #boss p.desc { color: var(--ink-dim); font-size: 16px; max-width: 760px; margin-bottom: 14px; }
+    #boss p.desc b { color: var(--ink); }
+    .boss-quote {
+      font-family: var(--mono); color: var(--cyan); font-size: 15px;
+      border-left: 3px solid var(--cyan); padding-left: 14px; margin: 22px 0; max-width: 640px;
+    }
+    .abilities { margin: 8px 0 28px; }
+
+    /* ---------- SKILLS ---------- */
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+    .skill { padding: 18px 20px; }
+    .skill .top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+    .skill .nm { font-family: var(--px); font-size: 10px; color: var(--ink); line-height: 1.7; }
+    .skill .lv { font-family: var(--px); font-size: 9px; color: var(--gold); white-space: nowrap; }
+    .skill .bar { height: 12px; border: 2px solid var(--line); background: #0a1120; position: relative; }
+    .skill .bar i {
+      position: absolute; inset: 0; width: 0;
+      background: repeating-linear-gradient(90deg, var(--cyan) 0 10px, #17a8c0 10px 12px);
+      transition: width 1.2s cubic-bezier(.2,.7,.2,1);
+    }
+    .skill .sub { font-family: var(--mono); font-size: 12px; color: var(--ink-mute); margin-top: 8px; }
+
+    /* ---------- QUEST LOG ---------- */
+    .quest-group { margin-bottom: 56px; }
+    .quest-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+    .quest-head h3 { font-family: var(--px); font-size: 13px; color: var(--ink); line-height: 1.8; }
+    .stamp {
+      font-family: var(--px); font-size: 8px; letter-spacing: 1px; padding: 5px 10px;
+      border: 2px solid var(--green); color: var(--green); transform: rotate(-2deg);
+    }
+    .stamp.vibe { border-color: var(--magenta); color: var(--magenta); transform: rotate(2deg); }
+    .quest-sub { color: var(--ink-mute); font-size: 14px; margin-bottom: 24px; max-width: 720px; }
+    .quests { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+    .quest { padding: 20px; display: flex; flex-direction: column; transition: transform .2s ease, box-shadow .2s ease; }
+    .quest:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px rgba(34,211,238,.25), 0 18px 44px rgba(0,0,0,.55); }
+    .quest .qt { font-family: var(--px); font-size: 11px; line-height: 1.8; color: var(--cyan); margin-bottom: 10px; }
+    .quest .qd { color: var(--ink-dim); font-size: 14px; flex: 1; margin-bottom: 12px; }
+    .quest .qmeta { font-family: var(--mono); font-size: 12px; color: var(--ink-mute); margin-bottom: 12px; }
+    .quest .qmeta .stars { color: var(--gold); }
+    .quest a.qlink { font-family: var(--px); font-size: 9px; color: var(--gold); text-decoration: none; letter-spacing: 1px; }
+    .quest a.qlink:hover { text-shadow: 0 0 10px rgba(251,191,36,.8); }
+
+    /* ---------- ACTIVITY ---------- */
+    .stat-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 34px; }
+    .tile { padding: 20px; text-align: center; }
+    .tile .num { font-family: var(--px); font-size: clamp(18px, 3vw, 26px); color: var(--cyan); margin-bottom: 10px; }
+    .tile .cap { font-family: var(--mono); font-size: 12px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 1px; }
+    .heat-wrap { padding: 22px; overflow-x: auto; }
+    .heat-title { font-family: var(--px); font-size: 9px; color: var(--ink-dim); margin-bottom: 16px; letter-spacing: 1px; }
+    #heatmap { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 11px); gap: 3px; width: max-content; }
+    #heatmap i {
+      width: 11px; height: 11px; border-radius: 2px; background: #10182b; display: block;
+    }
+    .heat-legend { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; margin-top: 14px; font-family: var(--mono); font-size: 11px; color: var(--ink-mute); }
+    .heat-legend i { width: 11px; height: 11px; border-radius: 2px; display: inline-block; }
+    #heat-tip {
+      position: fixed; z-index: 200; pointer-events: none; display: none;
+      font-family: var(--mono); font-size: 12px; color: var(--ink);
+      background: #0d1424; border: 1px solid var(--cyan); padding: 6px 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.6);
+    }
+
+    /* ---------- CONTINUE / contact ---------- */
+    #continue { text-align: center; }
+    .countdown {
+      font-family: var(--px); font-size: clamp(48px, 12vw, 110px); color: var(--red);
+      text-shadow: 0 0 30px rgba(251,113,133,.55); margin: 12px 0 26px;
+    }
+    .contact-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+
+    /* ---------- footer ---------- */
+    footer {
+      border-top: 1px solid var(--line); padding: 30px 20px 90px; text-align: center;
+      font-family: var(--mono); font-size: 12px; color: var(--ink-mute);
+    }
+    footer b { color: var(--ink-dim); }
+
+    /* ---------- toasts ---------- */
+    #toasts { position: fixed; right: 16px; bottom: 16px; z-index: 300; display: flex; flex-direction: column; gap: 10px; }
+    .toast {
+      font-family: var(--px); font-size: 9px; line-height: 1.9; color: var(--ink);
+      background: var(--panel); border: 2px solid var(--gold); padding: 12px 16px;
+      box-shadow: 0 0 24px rgba(251,191,36,.25), 0 12px 30px rgba(0,0,0,.6);
+      max-width: 300px; animation: toastin .4s ease;
+    }
+    .toast b { color: var(--gold); display: block; margin-bottom: 4px; }
+    @keyframes toastin { from { transform: translateX(120%); } }
+    .toast.out { transition: opacity .5s, transform .5s; opacity: 0; transform: translateX(120%); }
+
+    @media (max-width: 600px) {
+      .toast { max-width: 210px; font-size: 8px; padding: 9px 12px; }
+    }
+
+    body.godmode { animation: god 4s linear infinite; }
+    @keyframes god { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; }
+      .hero-main { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- HUD -->
+  <header id="hud" aria-label="game HUD">
+    <span class="hud-name">PLAYER: ERIC_MATAMOROS</span>
+    <span class="hud-lv">LV <span id="hud-level">1</span></span>
+    <div class="hud-xp" aria-hidden="true"><i id="hud-xp-fill"></i></div>
+    <span class="hud-coins">🪙 <span id="hud-coins">0</span></span>
+    <nav>
+      <a href="#map">MAP</a>
+      <a href="#boss">BOSS</a>
+      <a href="#skills">SKILLS</a>
+      <a href="#quests">QUESTS</a>
+      <a href="#activity">LOG</a>
+      <a href="#continue">CONTACT</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div id="boot" aria-live="polite"></div>
+    <div class="hero-main" id="hero-main">
+      <h1 class="hero-title">ERIC<br />MATAMOROS</h1>
+      <p class="hero-class">
+        CLASS: <b>AI-FIRST PRODUCT BUILDER</b><br />
+        GUILD: <b>TECHNICAL LEAD @ HP</b> · MAIN QUEST: <b>HP NIO</b>
+      </p>
+      <p class="hero-tagline">
+        I build <em>AI-first products</em> that drive innovation and solve real
+        business needs — from biochemistry labs to the AI companion running on
+        HP's industrial presses.
+      </p>
+      <button id="press-start" type="button">▶ PRESS START</button>
     </div>
-    <!-- /END Hero Section -->
+  </section>
 
-    <!-- About Section -->
-    <section id="about">
-      <div class="container">
-        <h2 class="section-title">About Me</h2>
-        <div class="row about-wrapper">
-          <div class="about-wrapper__image">
-            <img
-              class="img-fluid"
-              src="./assets/profile.jpeg"
-              alt="Profile Image"
-              width="450"
-              height="350"
-            />
-          </div>
-          <div class="about-wrapper__info">
-            <p class="about-wrapper__info-text">
+  <!-- WORLD MAP -->
+  <section id="map">
+    <p class="sec-tag reveal">WORLD 1-1 · STORY MODE</p>
+    <h2 class="sec-title reveal">SELECT LEVEL</h2>
+    <p class="sec-sub reveal">Every run has a trajectory. This one goes from decoding proteins to shipping AI products used on industrial print floors worldwide.</p>
 
-              Greetings! I'm Eric, currently serving as a Senior Data Scientist at Novartis Digital Finance Hub. <br><br>
-              
-              My educational background includes a major in Biochemistry, a master's degree in Bioinformatics and Biostatistics, and various certifications in areas like Deep Learning, AWS, and Industrialization of data-driven products. My expertise lies in harnessing the power of AI to tackle real business challenges, enhancing efficiency, precision, and execution speed while reducing costs for companies.<br><br>
+    <div class="player-card panel reveal">
+      <img src="./assets/profile.jpeg" alt="Pixelated portrait of Eric Matamoros" />
+      <div class="pc-info">
+        <b>ERIC MATAMOROS</b><br />
+        Barcelona spawn point · Biochemist turned AI product builder<br />
+        Passive perk: turns business problems into shipped AI products
+      </div>
+      <div class="pc-stats">
+        STR <span>██████░░</span><br />
+        INT <span>████████</span><br />
+        AI&nbsp;&nbsp; <span>█████████</span>
+      </div>
+    </div>
 
-              In my entrepreneurial journey, I've spearheaded diverse data-driven projects spanning multiple domains:<br><br>
-              A - Developed a computer vision solution for skin cancer detection (http://biop.ai/). <br><br>
-              B - Collaborated with onco-nutritionists, employing LLM models to create a comprehensive database of diets addressing treatment-related side-effects in cancer patients (https://nutrilieve.com/). <br><br>
-              C - Engineered analytics and price tracking tools for the Spanish real estate market (https://www.estate-tracker.com/).<br><br>
+    <div class="map">
+      <article class="lvl panel done reveal">
+        <span class="node" aria-hidden="true"></span>
+        <p class="lvl-tag">LEVEL 1 · TUTORIAL ZONE · CLEARED</p>
+        <h3>BSc BIOCHEMISTRY</h3>
+        <p>Learned the original source code: proteins, pathways and lab data. First scripts written to stop doing spreadsheets by hand — the moment the real skill tree opened.</p>
+        <div class="loot"><span class="chip">Scientific method</span><span class="chip">First code</span><span class="chip">Data literacy</span></div>
+      </article>
 
-              I am deeply passionate about leveraging AI to drive impactful solutions and enhance business outcomes.
-            </p>
-            <span class="about-wrapper__cta">
-              <a href="https://github.com/ericmatamoros" class="cta-btn cta-btn--resume">View Github</a>
-            </span>
-          </div>
+      <article class="lvl panel done reveal">
+        <span class="node" aria-hidden="true"></span>
+        <p class="lvl-tag">LEVEL 2 · RESEARCH CAVES · CLEARED</p>
+        <h3>MSc BIOINFORMATICS &amp; BIOSTATISTICS</h3>
+        <p>Grinded statistics and machine learning on biological data. Contributed to open-source scientific software: veriNA3d (nucleic-acid structural analysis, IRB Barcelona) and REpiFRIenDs (epidemic outbreak detection).</p>
+        <div class="loot"><span class="chip">R</span><span class="chip">Python</span><span class="chip">Statistics</span><span class="chip">Open source</span></div>
+      </article>
+
+      <article class="lvl panel done reveal">
+        <span class="node" aria-hidden="true"></span>
+        <p class="lvl-tag">LEVEL 3 · SIDE QUEST GUILD · CLEARED</p>
+        <h3>ENTREPRENEURIAL VENTURES</h3>
+        <p>Three side quests shipped: biop.ai (computer vision for skin-cancer detection), Nutrilieve (LLM-built nutrition database for cancer patients, with onco-nutritionists) and Estate Tracker (price analytics for the Spanish real-estate market).</p>
+        <div class="loot"><span class="chip">Computer vision</span><span class="chip">LLMs</span><span class="chip">Product building</span><span class="chip">0→1</span></div>
+      </article>
+
+      <article class="lvl panel done reveal">
+        <span class="node" aria-hidden="true"></span>
+        <p class="lvl-tag">LEVEL 4 · CORPORATE FORTRESS · CLEARED</p>
+        <h3>SENIOR DATA SCIENTIST @ NOVARTIS</h3>
+        <p>Digital Finance Hub. Brought AI to pharma-scale forecasting and finance: efficiency, precision and execution speed as measurable loot. Certified along the way in Deep Learning, AWS and industrialization of data-driven products.</p>
+        <div class="loot"><span class="chip">Forecasting</span><span class="chip">AWS</span><span class="chip">MLOps</span><span class="chip">Deep Learning</span></div>
+      </article>
+
+      <article class="lvl panel boss reveal">
+        <span class="node" aria-hidden="true"></span>
+        <p class="lvl-tag">LEVEL 5 · BOSS LEVEL · IN PROGRESS</p>
+        <h3>TECHNICAL LEAD @ HP <span class="you-are-here">YOU ARE HERE</span></h3>
+        <p>Technical lead and core developer of HP Nio — the AI-powered companion for HP's industrial digital presses. Leading the engineering of GenAI that thousands of print professionals talk to at work. Scroll down to meet the boss.</p>
+        <div class="loot"><span class="chip">GenAI</span><span class="chip">LLM systems</span><span class="chip">Technical leadership</span><span class="chip">AI-first product</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- BOSS: HP NIO -->
+  <section id="boss">
+    <p class="sec-tag reveal">⚠ WARNING · BOSS ENCOUNTER</p>
+    <h2 class="sec-title reveal">MAIN QUEST: HP NIO</h2>
+    <div class="frame reveal">
+      <div class="frame-inner">
+        <span class="boss-ribbon">CURRENT MAIN QUEST · LIVE IN PRODUCTION</span>
+        <h3 class="boss-name">HP NIO — AI-POWERED COMPANION</h3>
+        <p class="boss-role">ROLE: TECHNICAL LEAD &amp; CORE DEVELOPER</p>
+
+        <div class="boss-hp">
+          <p class="lbl">QUEST PROGRESS — SHIPPED &amp; EVOLVING</p>
+          <div class="bar"><i id="boss-hp-fill" data-w="86%"></i></div>
         </div>
-      </div>
-    </section>
-    <!-- /END About Section -->
 
-    <!--Projects Section-->
-    <section id="projects">
-      <div class="container">
-        <div class="project-wrapper">
-          <h2 class="section-title dark-blue-text">Projects</h2>
+        <p class="desc">
+          HP Nio is the <b>AI companion for industrial print production</b>, built into HP PrintOS
+          for HP Indigo digital presses. It analyzes real-time production data, predicts and
+          diagnoses equipment issues before they stop a press, walks operators through fixes
+          step by step, and surfaces bottlenecks across entire fleets — through a conversation.
+        </p>
+        <p class="desc">
+          As technical lead I drive its architecture and core development: the kind of
+          <b>AI-first product</b> I care about — not a demo, not a chatbot bolted on top, but GenAI
+          engineered into an industrial workflow where downtime costs real money and answers
+          have to be right.
+        </p>
 
-          <!-- Each .row is a project -->
-          <article class="row">
-            <div class="project-wrapper__text">
-              <h3 class="project-wrapper__text-title">OpenSea Floor Price Tracker</h3>
-              <p class="project-wrapper__text-info">
-                OpenSea (https://opensea.io/es) is the biggest NFT marketplace. In such a volatile market, keeping track of the floor price of the NFT collections is extremely important.<br>
-                The aim of this project is to automate the the tracking of floor price of any NFT collection and trigger mailing alerts when those collections reach a particular price.<br><br>
-                Technologies: Python, Google Actions
-              </p>
-              <div class="project-wrapper__text-btns">
-                <a href="https://github.com/ericmatamoros/opensea_mail" target="_blank" class="cta-btn text-color-main"
-                  >Source Code</a
-                >
-              </div>
-            </div>
+        <blockquote class="boss-quote">"Your next step in digital print productivity isn't a system upgrade. It's a conversation."</blockquote>
 
-            <div class="project-wrapper__image">
-              <a href="https://github.com/ericmatamoros/opensea_mail" target="_blank" rel="noopener noreferrer">
-                <div class="thumbnail rounded">
-                  <img
-                    src="./assets/opensea_project.png"
-                    class="img-fluid"
-                    alt="Project Image"
-                    width="1366"
-                    height="767"
-                  />
-                </div>
-              </a>
-            </div>
-          </article>
-          <!-- /END Project -->
-
-          <!-- Each .row is a project -->
-          <article class="row">
-            <div class="project-wrapper__text">
-              <h3 class="project-wrapper__text-title">Auto-Datathon: Automatize Workflows</h3>
-              <p class="project-wrapper__text-info">
-                This repository was developed with the aim to automatize the preprocessing, training & testing of multiple models that can be leveraged in Datathons or Kaggle Challenges.<br><br>
-                The in-built classes can easily work with AWS technologies to automate Hyperparameter tunning workflows to fasten the development of products in such quick-challenges.<br><br>
-                Technologies: Python
-              </p>
-              <div class="project-wrapper__text-btns">
-                <a href="https://github.com/ericmatamoros/auto_datathon" target="_blank" class="cta-btn text-color-main"
-                  >Source Code</a
-                >
-              </div>
-            </div>
-
-            <div class="project-wrapper__image">
-              <a href="https://github.com/ericmatamoros/auto_datathon" target="_blank" rel="noopener noreferrer">
-                <div class="thumbnail rounded">
-                  <img
-                    src="./assets/auto_datathon.png"
-                    class="img-fluid"
-                    alt="Project Image"
-                    width="1366"
-                    height="767"
-                  />
-                </div>
-              </a>
-            </div>
-          </article>
-          <!-- /END Project -->
-
-          <!-- Each .row is a project -->
-          <article class="row">
-            <div class="project-wrapper__text">
-              <h3 class="project-wrapper__text-title">Sentiment Analysis of Stock News using LLM</h3>
-              <p class="project-wrapper__text-info">
-                Sentiment analysis on stock news, press releases & earnings call has been widely used with the aim to capture positive sentiment or financial KPIs that could drive a positive impact on the stocks.<br><br>
-                In this project authors leverage ChatGPT, a Large-Language Model [LLM], with the aim to automatically obtain insights on CFO interventions for the different stocks in S&P500.<br><br>
-                Technologies: Python
-              </p>
-              <div class="project-wrapper__text-btns">
-                <a href="https://github.com/ericmatamoros/llm_earnings_call"_blank" class="cta-btn text-color-main"
-                  >Source Code</a
-                >
-              </div>
-            </div>
-
-            <div class="project-wrapper__image">
-              <a href="https://github.com/ericmatamoros/llm_earnings_call" target="_blank" rel="noopener noreferrer">
-                <div class="thumbnail rounded">
-                  <img
-                    src="./assets/sentiment_analysis.png"
-                    class="img-fluid"
-                    alt="Project Image"
-                    width="1366"
-                    height="767"
-                  />
-                </div>
-              </a>
-            </div>
-          </article>
-          <!-- /END Project -->
-
-          <!-- Each .row is a project -->
-          <article class="row">
-            <div class="project-wrapper__text">
-              <h3 class="project-wrapper__text-title">Streamlit app for background removal of images</h3>
-              <p class="project-wrapper__text-info">
-                Leverage a Streamlit app & the U2NET architecture in order to scale & remove the background of any image of intereset.<br><br>
-                The architecture automatically identifies the items in the image and provides a grey-scale mask that can be used to remove the background from the original image.<br><br>
-                Technologies: Python & Streamlit
-              </p>
-              <div class="project-wrapper__text-btns">
-                <a href="https://github.com/ericmatamoros/object_amplifier"_blank" class="cta-btn text-color-main"
-                  >Source Code</a
-                >
-              </div>
-            </div>
-
-            <div class="project-wrapper__image">
-              <a href="https://github.com/ericmatamoros/object_amplifier" target="_blank" rel="noopener noreferrer">
-                <div class="thumbnail rounded">
-                  <img
-                    src="./assets/object_amplifier.png"
-                    class="img-fluid"
-                    alt="Project Image"
-                    width="1366"
-                    height="767"
-                  />
-                </div>
-              </a>
-            </div>
-          </article>
-          <!-- /END Project -->
-
-          <!-- Each .row is a project -->
-          <article class="row">
-            <div class="project-wrapper__text">
-              <h3 class="project-wrapper__text-title">veriNA3d (Contributor)</h3>
-              <p class="project-wrapper__text-info">
-                VeriNA3d is an R package for the analysis of Nucleic Acid structural data. The software was developed on top of bio3d (Grant et al, 2006) with a higher level of abstraction. In addition of single-structure analyses, veriNA3d also implements pipelines to handle whole datasets of mmCIF/PDB structures. <br>
-                As far as we know, no similar software has been previously distributed, thus it aims to fill a gap in the data mining pipelines of PDB structural data analyses.<br><br>
-                Contributed through enhancing different features for a faster processing of the data, calculus of dihedral angles, among others.
-                Technologies: R
-              </p>
-              <div class="project-wrapper__text-btns">
-                <a href="http://mmb.irbbarcelona.org/gitlab/dgallego/veriNA3d"_blank" class="cta-btn text-color-main"
-                  >Source Code</a
-                >
-              </div>
-            </div>
-
-            <div class="project-wrapper__image">
-              <a href="http://mmb.irbbarcelona.org/gitlab/dgallego/veriNA3d" target="_blank" rel="noopener noreferrer">
-                <div class="thumbnail rounded">
-                  <img
-                    src="./assets/rna.png"
-                    class="img-fluid"
-                    alt="Project Image"
-                    width="1366"
-                    height="767"
-                  />
-                </div>
-              </a>
-            </div>
-          </article>
-          <!-- /END Project -->
-
-          <!-- Each .row is a project -->
-          <article class="row">
-            <div class="project-wrapper__text">
-              <h3 class="project-wrapper__text-title">REpiFRIenDs (Contributor)</h3>
-              <p class="project-wrapper__text-info">
-                This repository contains the R package for Epidemiological Foci Relating Infections by Distance (EpiFRIenDs), a software to detect and analyse foci (clusters, outbreaks or hotspots) of infections from a given disease.<br><br>
-                Contributed through enhancing multiple features of the core algorithm & implementing an application deployed using RShiny technology, available in Release 2.0 of the software. <br><br>
-                Technologies: R, RShiny
-              </p>
-              <div class="project-wrapper__text-btns">
-                <a href="https://github.com/arnaupujol/repifriends/tree/develop" target="_blank" class="cta-btn text-color-main"
-                  >Source Code</a
-                >
-              </div>
-            </div>
-
-            <div class="project-wrapper__image">
-              <a href="https://github.com/arnaupujol/repifriends/tree/develop" target="_blank" rel="noopener noreferrer">
-                <div class="thumbnail rounded">
-                  <img
-                    src="./assets/repifriends.png"
-                    class="img-fluid"
-                    alt="Project Image"
-                    width="1366"
-                    height="767"
-                  />
-                </div>
-              </a>
-            </div>
-          </article>
-          <!-- /END Project -->
+        <div class="abilities">
+          <span class="chip">Real-time production insights</span>
+          <span class="chip">Predictive diagnostics</span>
+          <span class="chip">Conversational troubleshooting</span>
+          <span class="chip">Fleet-wide optimization</span>
+          <span class="chip">Operator training acceleration</span>
         </div>
-      </div>
-    </section>
-    <!-- End Projects Section -->
 
-    <!-- Contact Section -->
-    <section id="contact">
-      <div class="container">
-          <h2 class="section-title">Contact</h2>
-          <div class="contact-wrapper">
-              <p class="contact-wrapper__text">Download my CV & contact me for new initiatives or collaborations</p>
-              <a href="assets/Eric_Matamoros_CV.pdf" download="EricMatamorosCV.pdf" class="cta-btn cta-btn--resume">Download CV</a>
-              <a href="mailto:ericmatamoros1999@gmail.com" class="cta-btn cta-btn--email">Email Me</a>
-          </div>
+        <a class="btn gold" href="https://www.hp.com/es-es/industrial-digital-presses/hp-nio-ai-powered-companion.html" target="_blank" rel="noopener noreferrer">INSPECT BOSS ON HP.COM →</a>
       </div>
-    </section>
-    <!-- END Contact Section -->
+    </div>
+  </section>
 
-    <!-- Footer Section -->
-    <footer class="footer">
-      <div class="container">
-        <a href="#hero" class="back-to-top" aria-label="go back to top">
-          <i class="fa fa-angle-up fa-2x" aria-hidden="true"></i>
-        </a>
-        <div class="social-links">
-          <a
-            href="https://www.instagram.com/ericmatamoros/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="instagram"
-          >
-            <i class="fa-brands fa-instagram"></i>
-          </a>
-          <a
-            href="https://www.linkedin.com/in/eric-matamoros-morales/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="linkedin"
-          >
-            <i class="fa-brands fa-linkedin"></i>
-          </a>
-          <a
-            href="https://github.com/ericmatamoros"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="github"
-          >
-            <i class="fa-brands fa-github"></i>
-          </a>
-        </div>
-        <hr />
+  <!-- SKILLS -->
+  <section id="skills">
+    <p class="sec-tag reveal">CHARACTER SHEET</p>
+    <h2 class="sec-title reveal">SKILL TREE</h2>
+    <p class="sec-sub reveal">Points allocated over a decade of turning data into products. Respec not planned.</p>
+    <div class="skills-grid" id="skills-grid"></div>
+  </section>
+
+  <!-- QUEST LOG -->
+  <section id="quests">
+    <p class="sec-tag reveal">INVENTORY</p>
+    <h2 class="sec-title reveal">QUEST LOG</h2>
+    <p class="sec-sub reveal">Two crafting styles, honestly labeled. The classics were forged line by line; the new generation is built AI-paired — because building <b style="color:var(--ink)">with</b> AI is the job now.</p>
+
+    <div class="quest-group">
+      <div class="quest-head reveal">
+        <h3>⚔️ HANDCRAFTED</h3>
+        <span class="stamp">100% HUMAN-CODED</span>
       </div>
-    </footer>
-    <!-- END Footer Section -->
+      <p class="quest-sub reveal">Written entirely by hand, before AI pair-programmers existed. Every line artisanal.</p>
+      <div class="quests" id="quests-hand"></div>
+    </div>
 
-    <script>
-      document.getElementById("year").textContent = new Date().getFullYear()
-    </script>
-    <script src="./javascript/vanilla-tilt.min.js"></script>
-    <script type="text/javascript" src="./javascript/valtilt.js"></script>
-  </body>
+    <div class="quest-group">
+      <div class="quest-head reveal">
+        <h3>🤖 VIBECODED</h3>
+        <span class="stamp vibe">AI-PAIRED BUILD</span>
+      </div>
+      <p class="quest-sub reveal">Designed and directed by me, built at 10× speed with AI agents. The same craft — applied one abstraction level up.</p>
+      <div class="quests" id="quests-vibe"></div>
+    </div>
+  </section>
+
+  <!-- ACTIVITY -->
+  <section id="activity">
+    <p class="sec-tag reveal">SAVE FILE</p>
+    <h2 class="sec-title reveal">ACTIVITY LOG</h2>
+    <p class="sec-sub reveal">Straight from the GitHub save file. The 25 public repos are just the demo — the real campaign runs across <b style="color:var(--ink)">95 private builds</b> plus HP's own forge.</p>
+
+    <div class="stat-tiles reveal" id="stat-tiles"></div>
+
+    <div class="heat-wrap panel reveal">
+      <p class="heat-title">PUBLIC CONTRIBUTIONS · LAST 12 MONTHS</p>
+      <div id="heatmap" role="img" aria-label="GitHub contribution heatmap for the last year"></div>
+      <div class="heat-legend">
+        <span>Less</span>
+        <i style="background:#10182b"></i><i style="background:#0e4429"></i><i style="background:#006d32"></i><i style="background:#26a641"></i><i style="background:#39d353"></i>
+        <span>More</span>
+        <span style="margin-left:auto">🔒 most quests are completed in private repos — this map only shows surface activity</span>
+      </div>
+    </div>
+    <div id="heat-tip"></div>
+  </section>
+
+  <!-- CONTINUE -->
+  <section id="continue">
+    <p class="sec-tag reveal">GAME OVER? NEVER.</p>
+    <h2 class="sec-title reveal">CONTINUE?</h2>
+    <div class="countdown reveal" id="countdown" aria-hidden="true">9</div>
+    <p class="sec-sub reveal" style="margin-left:auto;margin-right:auto;">
+      Building an AI-first product? Need someone who has shipped GenAI into industrial
+      production, not just prototypes? Insert coin.
+    </p>
+    <div class="contact-btns reveal">
+      <a class="btn" href="mailto:ericmatamoros1999@gmail.com">📧 INSERT COIN (EMAIL)</a>
+      <a class="btn alt" href="https://www.linkedin.com/in/eric-matamoros-morales/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+      <a class="btn alt" href="https://github.com/ericmatamoros" target="_blank" rel="noopener noreferrer">GITHUB</a>
+      <a class="btn gold" href="./assets/Eric_Matamoros_CV.pdf" download="EricMatamorosCV.pdf">💾 SAVE CV</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© <span id="year"></span> ERIC MATAMOROS · <b>ericmatamoros.github.io</b></p>
+    <p style="margin-top:8px">This site practices what it preaches: designed by me, vibecoded with AI. Try the Konami code. 🕹️</p>
+  </footer>
+
+  <div id="toasts" aria-live="polite"></div>
+
+  <script id="site-data">
+    const SITE_DATA = {
+      stats: { repos: 120, commits: 882, apps: 38, years: 7 },
+      calendar: {
+        start: "2025-07-20",
+        total: 60,
+        counts: "0000000000000000000000000003303000092200000001000000000000000000000000000000000000000000000000000000010500020400200000000000000000000000000000000000000000000012000000000000010000000000000000000000000000000000000000000000000000100000000000000000000000000000001000000000000001000000000000001100000100020000000010000000000000010000000000000000000000024003000000000000000"
+      },
+      skills: [
+        { nm: "GENAI & LLM SYSTEMS", lv: 9, sub: "RAG, agents, eval — shipped in HP Nio", w: "92%" },
+        { nm: "PYTHON", lv: 10, sub: "The main weapon since day one", w: "97%" },
+        { nm: "MACHINE LEARNING", lv: 9, sub: "Forecasting, CV, NLP in production", w: "90%" },
+        { nm: "MLOPS & CLOUD (AWS)", lv: 8, sub: "Industrialization of data products", w: "82%" },
+        { nm: "PRODUCT & LEADERSHIP", lv: 9, sub: "Technical lead — vision to shipped", w: "88%" },
+        { nm: "R & BIOINFORMATICS", lv: 7, sub: "Origin story: scientific computing", w: "72%" }
+      ],
+      handcrafted: [
+        {
+          title: "OPENSEA FLOOR TRACKER",
+          desc: "Automated floor-price tracking for any NFT collection on OpenSea, firing mail alerts the moment a collection hits your target price.",
+          tech: ["Python", "Google Actions"],
+          meta: "★ 1 · 21 commits · public",
+          url: "https://github.com/ericmatamoros/opensea_mail"
+        },
+        {
+          title: "AUTO-DATATHON",
+          desc: "Automated preprocessing, training and testing of multiple models to speed-run datathons and Kaggle challenges, with AWS hyper-parameter tuning workflows.",
+          tech: ["Python", "Jupyter", "AWS"],
+          meta: "9 commits · public",
+          url: "https://github.com/ericmatamoros/auto_datathon"
+        },
+        {
+          title: "LLM EARNINGS-CALL SENTIMENT",
+          desc: "LLM-powered insight extraction from CFO interventions across S&P 500 earnings calls — mining financial sentiment before it was mainstream.",
+          tech: ["Python", "LLM", "Finance"],
+          meta: "public",
+          url: "https://github.com/ericmatamoros/-STOCK-llm_earnings_call"
+        },
+        {
+          title: "OBJECT AMPLIFIER",
+          desc: "Streamlit app wrapping the U2NET architecture: it masks the subjects in any image and strips the background clean with deep learning.",
+          tech: ["Python", "Streamlit", "U2NET"],
+          meta: "public",
+          url: "https://github.com/ericmatamoros/object_amplifier"
+        },
+        {
+          title: "VERINA3D · CONTRIBUTOR",
+          desc: "R package for nucleic-acid structural analysis built at IRB Barcelona. Contributed faster data processing and dihedral-angle calculus.",
+          tech: ["R", "Bioinformatics"],
+          meta: "open science · IRB Barcelona",
+          url: "http://mmb.irbbarcelona.org/gitlab/dgallego/veriNA3d"
+        },
+        {
+          title: "REPIFRIENDS · CONTRIBUTOR",
+          desc: "Detects foci of infectious-disease outbreaks from case data. Enhanced the core algorithm and shipped the RShiny app included in Release 2.0.",
+          tech: ["R", "RShiny", "Epidemiology"],
+          meta: "open science",
+          url: "https://github.com/arnaupujol/repifriends"
+        }
+      ],
+      vibecoded: [
+        {
+          title: "REDACTED CINEFI",
+          desc: "Full financials platform for film financing — the most-committed repo in the entire fleet, designed, directed and shipped AI-paired.",
+          tech: ["TypeScript", "Next.js"],
+          meta: "203 commits · 🔒 private repo · app live",
+          url: "https://redacted-cinefi.vercel.app"
+        },
+        {
+          title: "JIRASAN UNIVERSE",
+          desc: "A 15-repo web3 gaming ecosystem: arcade games (Rats Revenge, Bomber X, MegaJEET), runners, sliders and a community hub — all AI-paired builds.",
+          tech: ["TypeScript", "Web3", "Games"],
+          meta: "15+ repos · community hub live",
+          url: "https://jirasan-webpage-web.vercel.app"
+        },
+        {
+          title: "STICKERS PLATFORM",
+          desc: "Create and ship your own sticker sets straight from the browser.",
+          tech: ["TypeScript"],
+          meta: "13 commits · public · app live",
+          url: "https://stickers-platform.vercel.app"
+        },
+        {
+          title: "WORTHIT",
+          desc: "A product idea iterated at AI speed — five repos of evolution from landing page to working Svelte app.",
+          tech: ["Svelte"],
+          meta: "5 iterations · app live",
+          url: "https://worthit-seven.vercel.app"
+        },
+        {
+          title: "BUILD AI BOOTCAMP",
+          desc: "Teaching people how to build with AI — a bootcamp site that practices exactly what it preaches.",
+          tech: ["JavaScript"],
+          meta: "25 commits · app live",
+          url: "https://buildaibootcamp.vercel.app"
+        },
+        {
+          title: "BAYC MAP",
+          desc: "Interactive map explorer for the Bored Ape NFT collection — freshly pushed this week.",
+          tech: ["TypeScript"],
+          meta: "26 commits · app live",
+          url: "https://bayc-map.vercel.app"
+        },
+        {
+          title: "HUMANOID",
+          desc: "The freshest drop from the lab — a web experiment pushed to production this month.",
+          tech: ["CSS", "HTML"],
+          meta: "public · app live",
+          url: "https://humanoid-nu.vercel.app"
+        },
+        {
+          title: "🔒 SECRET LEVELS ×95",
+          desc: "Ninety-five private builds: games, agents, web3 tools and SaaS experiments. Ideas become shipped apps in days, not quarters — the AI-first velocity dividend.",
+          tech: ["Everything"],
+          meta: "95 private repos in the vault",
+          url: "https://github.com/ericmatamoros"
+        }
+      ]
+    };
+  </script>
+
+  <script>
+  (() => {
+    "use strict";
+    const $ = (s, el = document) => el.querySelector(s);
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* ---------- starfield ---------- */
+    const cv = $("#stars"), cx = cv.getContext("2d");
+    let stars = [];
+    function sizeStars() {
+      cv.width = innerWidth; cv.height = innerHeight;
+      stars = Array.from({ length: Math.min(160, innerWidth / 8) }, () => ({
+        x: Math.random() * cv.width, y: Math.random() * cv.height,
+        z: Math.random() * 1.2 + .2, r: Math.random() * 1.4 + .3
+      }));
+    }
+    sizeStars(); addEventListener("resize", sizeStars);
+    (function drawStars() {
+      cx.clearRect(0, 0, cv.width, cv.height);
+      for (const s of stars) {
+        cx.globalAlpha = .35 + s.z * .4;
+        cx.fillStyle = s.z > 1 ? "#9be8f7" : "#5b6b8c";
+        cx.fillRect(s.x, s.y, s.r, s.r);
+        if (!reduced) { s.y += s.z * .18; if (s.y > cv.height) s.y = -2; }
+      }
+      if (!reduced) requestAnimationFrame(drawStars);
+    })();
+
+    /* ---------- boot sequence ---------- */
+    const bootLines = [
+      ["> BOOTING CAREER.SYS v5.0 ", "", 18],
+      ["> LOADING PLAYER: ", "ERIC_MATAMOROS", 24],
+      ["> CLASS: ", "AI-FIRST PRODUCT BUILDER", 20],
+      ["> GUILD: ", "HP · TECHNICAL LEAD", 20],
+      ["> MAIN QUEST: ", "HP NIO — AI-POWERED COMPANION", 16],
+      ["> AI_FIRST_MODE ......... ", "[ENABLED]", 20]
+    ];
+    const bootEl = $("#boot"), heroMain = $("#hero-main"), hud = $("#hud");
+    let bootDone = false;
+    function finishBoot() {
+      if (bootDone) return;
+      bootDone = true;
+      bootEl.innerHTML = bootLines.map(l => `<div>${l[0]}<span class="ok">${l[1]}</span></div>`).join("") + `<div>&gt; READY<span class="cursor"></span></div>`;
+      heroMain.classList.add("show");
+      hud.classList.add("on");
+    }
+    async function boot() {
+      if (reduced) return finishBoot();
+      for (const [pre, hi, speed] of bootLines) {
+        if (bootDone) return;
+        const div = document.createElement("div");
+        bootEl.appendChild(div);
+        for (let i = 0; i <= pre.length; i++) {
+          if (bootDone) return;
+          div.textContent = pre.slice(0, i);
+          await new Promise(r => setTimeout(r, speed));
+        }
+        const span = document.createElement("span");
+        span.className = "ok"; div.appendChild(span);
+        for (let i = 0; i <= hi.length; i++) {
+          if (bootDone) return;
+          span.textContent = hi.slice(0, i);
+          await new Promise(r => setTimeout(r, speed));
+        }
+      }
+      finishBoot();
+    }
+    boot();
+    bootEl.addEventListener("click", finishBoot);
+    setTimeout(finishBoot, 9000);
+    $("#press-start").addEventListener("click", () => $("#map").scrollIntoView({ behavior: reduced ? "auto" : "smooth" }));
+
+    /* ---------- render skills ---------- */
+    $("#skills-grid").innerHTML = SITE_DATA.skills.map(s => `
+      <div class="skill panel reveal">
+        <div class="top"><span class="nm">${s.nm}</span><span class="lv">LV ${s.lv}</span></div>
+        <div class="bar"><i data-w="${s.w}"></i></div>
+        <p class="sub">${s.sub}</p>
+      </div>`).join("");
+
+    /* ---------- render quests ---------- */
+    const questCard = q => `
+      <article class="quest panel reveal">
+        <h4 class="qt">${q.title}</h4>
+        <p class="qd">${q.desc}</p>
+        <p class="qmeta">${q.tech.map(t => `<span class="chip">${t}</span>`).join("")}</p>
+        <p class="qmeta">${q.meta || ""}</p>
+        <a class="qlink" href="${q.url}" target="_blank" rel="noopener noreferrer">OPEN QUEST →</a>
+      </article>`;
+    $("#quests-hand").innerHTML = SITE_DATA.handcrafted.map(questCard).join("");
+    $("#quests-vibe").innerHTML = SITE_DATA.vibecoded.map(questCard).join("");
+
+    /* ---------- stat tiles ---------- */
+    const st = SITE_DATA.stats;
+    const tiles = [
+      [st.repos, "repos owned"],
+      [st.commits, "commits authored"],
+      [st.apps, "apps deployed live"],
+      [st.years, "years on github"]
+    ];
+    $("#stat-tiles").innerHTML = tiles.map(([n, cap]) => `
+      <div class="tile panel"><div class="num" data-count="${n}">0</div><div class="cap">${cap}</div></div>`).join("");
+
+    /* ---------- heatmap ---------- */
+    const ramp = ["#10182b", "#0e4429", "#006d32", "#26a641", "#39d353"];
+    const lvlOf = c => c === 0 ? 0 : c === 1 ? 1 : c <= 3 ? 2 : c <= 6 ? 3 : 4;
+    const hm = $("#heatmap"), tip = $("#heat-tip");
+    const calStart = new Date(SITE_DATA.calendar.start + "T00:00:00Z");
+    hm.innerHTML = [...SITE_DATA.calendar.counts].map((ch, i) => {
+      const c = +ch;
+      const d = new Date(calStart); d.setUTCDate(d.getUTCDate() + i);
+      return `<i style="background:${ramp[lvlOf(c)]}" data-d="${d.toISOString().slice(0, 10)}" data-c="${c}"></i>`;
+    }).join("");
+    hm.addEventListener("mousemove", e => {
+      const t = e.target.closest("i");
+      if (!t) { tip.style.display = "none"; return; }
+      tip.textContent = `${t.dataset.c} contribution${t.dataset.c === "1" ? "" : "s"} · ${t.dataset.d}`;
+      tip.style.display = "block";
+      tip.style.left = Math.min(e.clientX + 14, innerWidth - 220) + "px";
+      tip.style.top = (e.clientY - 38) + "px";
+    });
+    hm.addEventListener("mouseleave", () => tip.style.display = "none");
+
+    /* ---------- reveals + bars + counters ---------- */
+    const io = new IntersectionObserver(entries => {
+      for (const en of entries) {
+        if (!en.isIntersecting) continue;
+        en.target.classList.add("in");
+        en.target.querySelectorAll("[data-w]").forEach(b => b.style.width = b.dataset.w);
+        en.target.querySelectorAll("[data-count]").forEach(el => countUp(el));
+        io.unobserve(en.target);
+      }
+    }, { threshold: .18 });
+    document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+    function countUp(el) {
+      const target = +el.dataset.count, dur = reduced ? 0 : 1400, t0 = performance.now();
+      (function tick(t) {
+        const p = dur ? Math.min(1, (t - t0) / dur) : 1;
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))).toLocaleString("en-US");
+        if (p < 1) requestAnimationFrame(tick);
+      })(t0);
+    }
+
+    /* ---------- HUD: xp, level, coins ---------- */
+    const xpFill = $("#hud-xp-fill"), lvEl = $("#hud-level"), coinEl = $("#hud-coins");
+    let coins = 0;
+    function addCoins(n) {
+      coins += n;
+      coinEl.textContent = coins.toLocaleString("en-US");
+    }
+    addEventListener("scroll", () => {
+      const h = document.documentElement;
+      const p = h.scrollTop / (h.scrollHeight - h.clientHeight);
+      xpFill.style.width = (p * 100).toFixed(1) + "%";
+      lvEl.textContent = Math.min(99, 1 + Math.floor(p * 20));
+    }, { passive: true });
+
+    /* ---------- achievements ---------- */
+    const unlocked = new Set();
+    function achieve(id, title, text, reward = 50) {
+      if (unlocked.has(id)) return;
+      unlocked.add(id);
+      addCoins(reward);
+      const box = $("#toasts");
+      while (box.children.length >= 3) box.firstChild.remove();
+      const t = document.createElement("div");
+      t.className = "toast";
+      t.innerHTML = `<b>🏆 ACHIEVEMENT UNLOCKED</b>${title} <span style="color:var(--gold)">+${reward}🪙</span><br><span style="color:var(--ink-dim)">${text}</span>`;
+      $("#toasts").appendChild(t);
+      setTimeout(() => { t.classList.add("out"); setTimeout(() => t.remove(), 600); }, 4200);
+    }
+    const achMap = {
+      map: ["STORY MODE", "Career path revealed"],
+      boss: ["BOSS ENCOUNTER", "You met HP Nio"],
+      skills: ["MIN-MAXED", "Skill tree inspected"],
+      quests: ["LOOT HOARDER", "Quest log opened"],
+      activity: ["THE GRIND IS REAL", "Save file checked"],
+      continue: ["NEW ALLY?", "Contact screen reached"]
+    };
+    const secIO = new IntersectionObserver(entries => {
+      for (const en of entries) {
+        if (en.isIntersecting && achMap[en.target.id]) {
+          achieve(en.target.id, achMap[en.target.id][0], achMap[en.target.id][1]);
+          secIO.unobserve(en.target);
+        }
+      }
+    }, { threshold: .3 });
+    Object.keys(achMap).forEach(id => { const el = document.getElementById(id); if (el) secIO.observe(el); });
+
+    /* ---------- konami ---------- */
+    const code = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+    let ki = 0;
+    addEventListener("keydown", e => {
+      ki = (e.key === code[ki]) ? ki + 1 : (e.key === code[0] ? 1 : 0);
+      if (ki === code.length) {
+        ki = 0;
+        document.body.classList.toggle("godmode");
+        achieve("konami", "GOD MODE", "↑↑↓↓←→←→BA — 30 lives granted", 300);
+      }
+    });
+
+    /* ---------- continue countdown ---------- */
+    const cd = $("#countdown");
+    if (cd && !reduced) {
+      let n = 9;
+      setInterval(() => {
+        n = n === 0 ? 9 : n - 1;
+        cd.textContent = n;
+        cd.style.color = n <= 3 ? "var(--gold)" : "var(--red)";
+      }, 900);
+    }
+
+    $("#year").textContent = new Date().getFullYear();
+  })();
+  </script>
+</body>
 </html>
