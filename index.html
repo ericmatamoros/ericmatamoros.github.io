@@ -226,6 +226,11 @@
     .lvl-logo img { height: 100%; display: block; }
     .lvl p { color: var(--ink-dim); font-size: 15px; max-width: 720px; }
     .lvl .loot { margin-top: 12px; }
+    .lvl-link {
+      display: inline-block; margin-top: 14px; font-family: var(--px); font-size: 8px;
+      color: var(--gold); text-decoration: none; letter-spacing: 1px;
+    }
+    .lvl-link:hover { text-shadow: 0 0 10px rgba(251,191,36,.8); }
     .you-are-here {
       display: inline-block; font-family: var(--px); font-size: 8px; color: #2b1d02;
       background: var(--gold); padding: 4px 8px; margin-left: 10px; vertical-align: middle;
@@ -240,6 +245,7 @@
     }
     @keyframes borderflow { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
     #boss .frame-inner { background: var(--bg2); padding: clamp(24px, 5vw, 48px); }
+    .nio-badge { display: block; height: 52px; margin: 4px 0 20px; }
     .boss-ribbon {
       font-family: var(--px); font-size: 9px; letter-spacing: 2px; color: #2b0430;
       background: var(--magenta); display: inline-block; padding: 6px 12px; margin-bottom: 22px;
@@ -433,6 +439,7 @@
         <h3>BSc BIOCHEMISTRY · UNIVERSITAT DE BARCELONA</h3>
         <p>Sep 2017 – Jun 2021 · grade 8.3/10. Learned the original source code: proteins, pathways and lab data. Final thesis (9.2/10) built a tool to estimate RNA tertiary structure — the moment code took over the run.</p>
         <div class="loot"><span class="chip">Scientific method</span><span class="chip">First code</span><span class="chip">Data literacy</span></div>
+        <a class="lvl-link" href="https://www.linkedin.com/in/eric-matamoros-morales/overlay/Education/501538787/treasury/?profileId=ACoAAB_qoPQBaWF5qb-uSjk_EQR_vVQULcWWoHM" target="_blank" rel="noopener noreferrer">📜 PROOF ON LINKEDIN →</a>
       </article>
 
       <article class="lvl panel done reveal">
@@ -441,6 +448,7 @@
         <h3>MSc BIOINFORMATICS &amp; BIOSTATISTICS · UOC</h3>
         <p>Sep 2021 – Sep 2023 · grade 8.5/10. Statistics and machine learning on biological data. Final thesis (9.3/10): enhancement of EpiFRIenDs, an algorithm for hotspot detection of epidemiological disease, with special focus on malaria.</p>
         <div class="loot"><span class="chip">R</span><span class="chip">Statistics</span><span class="chip">Machine learning</span></div>
+        <a class="lvl-link" href="https://www.linkedin.com/in/eric-matamoros-morales/overlay/Education/765118510/treasury/?profileId=ACoAAB_qoPQBaWF5qb-uSjk_EQR_vVQULcWWoHM" target="_blank" rel="noopener noreferrer">📜 PROOF ON LINKEDIN →</a>
       </article>
 
       <article class="lvl panel done reveal">
@@ -449,6 +457,7 @@
         <h3>POSTGRADUATE IN AI · UPC SCHOOL</h3>
         <p>Sep 2024 – Mar 2025 · grade 9/10. Postgraduate Course in Artificial Intelligence with Deep Learning by UPC. Final project: a multiple-instance-learning pipeline for whole-slide medical images.</p>
         <div class="loot"><span class="chip">Deep Learning</span><span class="chip">Computer vision</span><span class="chip">Neural nets</span></div>
+        <a class="lvl-link" href="https://www.linkedin.com/in/eric-matamoros-morales/overlay/Education/1084142389/treasury/?profileId=ACoAAB_qoPQBaWF5qb-uSjk_EQR_vVQULcWWoHM" target="_blank" rel="noopener noreferrer">📜 PROOF ON LINKEDIN →</a>
       </article>
 
       <p class="map-arc reveal" style="margin-top:44px">▸ ARC II · WORK EXPERIENCE · +6 YEARS</p>
@@ -486,6 +495,7 @@
     <div class="frame reveal">
       <div class="frame-inner">
         <span class="boss-ribbon">CURRENT MAIN QUEST · LIVE IN PRODUCTION</span>
+        <img class="nio-badge" src="./assets/hp-nio-badge.png" alt="Ask HP Nio" />
         <h3 class="boss-name">HP NIO — AI-POWERED COMPANION</h3>
         <p class="boss-role">ROLE: TECHNICAL LEAD AI · CORE DEVELOPER · SQUAD OF 6</p>
 
@@ -542,7 +552,7 @@
         <h3>⚔️ HANDCRAFTED</h3>
         <span class="stamp">100% HUMAN-CODED</span>
       </div>
-      <p class="quest-sub reveal">Written entirely by hand, before AI pair-programmers existed. Every line artisanal.</p>
+      <p class="quest-sub reveal">Written line by line, the artisanal way — every function typed by hand.</p>
       <div class="quests" id="quests-hand"></div>
     </div>
 
@@ -610,7 +620,7 @@
         counts: "0000000000000000000000000003303000001000000072080303000010000000000009600000390001014000000000000020000500020400200000991350909744823037072719920000772942339220000300002253109921000920000090000009120201282220100000000000003000000000400000002943427500069999999999922000000021000199410000000000000000010000000542200601200000000000000000003001000000014013010000490003914"
       },
       skills: [
-        { nm: "GENAI & LLM SYSTEMS", lv: 9, sub: "RAG, agents, eval — shipped in HP Nio", w: "92%" },
+        { nm: "GENAI & LLM SYSTEMS", lv: "MAX", sub: "RAG, agents, eval — shipped in HP Nio", w: "100%" },
         { nm: "PYTHON", lv: 10, sub: "The main weapon since day one", w: "97%" },
         { nm: "MACHINE LEARNING", lv: 9, sub: "Forecasting, CV, NLP in production", w: "90%" },
         { nm: "MLOPS & CLOUD (AWS)", lv: 8, sub: "Industrialization of data products", w: "82%" },
@@ -618,6 +628,13 @@
         { nm: "R & BIOINFORMATICS", lv: 7, sub: "Origin story: scientific computing", w: "72%" }
       ],
       handcrafted: [
+        {
+          title: "MIL WSI CLASSIFIER",
+          desc: "End-to-end Multiple-Instance-Learning pipeline for whole-slide-image cancer diagnosis, with post-hoc explainability maps and a Streamlit app for pathologists. Final project of the UPC AI & Deep Learning postgrad.",
+          tech: ["Python", "Deep Learning", "Streamlit"],
+          meta: "★ 1 · 43 commits · public",
+          url: "https://github.com/ericmatamoros/aidl_wsi"
+        },
         {
           title: "OPENSEA FLOOR TRACKER",
           desc: "Automated floor-price tracking for any NFT collection on OpenSea, firing mail alerts the moment a collection hits your target price.",
@@ -704,10 +721,11 @@
         },
         {
           title: "CRYPTOWAY",
+          img: "./assets/projects/cryptoway.jpg",
           desc: "Frontier AI, paid from your wallet: one USDC-funded API key for Claude Code or any SDK — no card, no subscription, every token metered on your ledger.",
           tech: ["TypeScript", "Base", "Claude API"],
-          meta: "in the forge · launching soon",
-          url: ""
+          meta: "USDC on Base · app live",
+          url: "https://cryptoway-phi.vercel.app/"
         },
         {
           title: "NFT HOLDER ATLAS",
